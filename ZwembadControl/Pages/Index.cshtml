@@ -1,0 +1,83 @@
+﻿@page
+@using ZwembadControl.Pages;
+@model IndexModel
+@{
+    ViewData["Title"] = "Warmtepomp Besturing";
+}
+<div class="flex flex-col items-center justify-center min-h-screen bg-gray-100 text-gray-900">
+    <div class="w-full max-w-md bg-white rounded-3xl shadow-xl p-6 space-y-6">
+        <h1 class="text-2xl font-semibold text-center">🌡️ Warmtepomp Besturing</h1>
+
+        <!-- Huidige modus weergave -->
+        <div class="text-center text-lg font-semibold">
+            <p>Huidige modus: <span class="text-blue-500">@Model.Mode</span></p>
+        </div>
+
+        <!-- Modus Schakelaar -->
+        <div class="flex justify-between items-center p-4 bg-gray-200 rounded-2xl">
+            <span class="text-lg">Schakel Modus:</span>
+            <form method="post">
+                <button name="Mode" value="Slim" class="px-4 py-2 rounded-lg transition-all
+                    @(Model.Mode == "Slim" ? "bg-blue-500 text-white" : "bg-gray-300 text-gray-700")">
+                    Slim
+                </button>
+                <button name="Mode" value="Normaal" class="px-4 py-2 rounded-lg transition-all
+                    @(Model.Mode == "Normaal" ? "bg-blue-500 text-white" : "bg-gray-300 text-gray-700")">
+                    Normaal
+                </button>
+            </form>
+        </div>
+
+        <!-- Klep Besturing voor zwembad -->
+        <div class="flex justify-between items-center p-4 bg-gray-200 rounded-2xl">
+            <span class="text-lg">Klep naar zwembad:</span>
+            <form method="post">
+                <button name="KlepStatus" value="Open" class="px-4 py-2 rounded-lg transition-all
+                    @(Model.ZwembadKlepStatus == "Open" ? "bg-green-500 text-white" : "bg-gray-300 text-gray-700")">
+                    Open
+                </button>
+                <button name="KlepStatus" value="Dicht" class="px-4 py-2 rounded-lg transition-all
+                    @(Model.ZwembadKlepStatus == "Dicht" ? "bg-red-500 text-white" : "bg-gray-300 text-gray-700")">
+                    Dicht
+                </button>
+                <button name="KlepStatus" value="Automatisch" class="px-4 py-2 rounded-lg transition-all
+                    @(Model.ZwembadKlepStatus == "Automatisch" ? "bg-yellow-500 text-white" : "bg-gray-300 text-gray-700")">
+                    Automatisch
+                </button>
+            </form>
+        </div>
+
+        <!-- Klep Besturing voor boiler -->
+        <div class="flex justify-between items-center p-4 bg-gray-200 rounded-2xl">
+            <span class="text-lg">Klep naar boiler:</span>
+            <form method="post">
+                <button name="BoilerKlepStatus" value="Open" class="px-4 py-2 rounded-lg transition-all
+                    @(Model.BoilerKlepStatus == "Open" ? "bg-green-500 text-white" : "bg-gray-300 text-gray-700")">
+                    Open
+                </button>
+                <button name="BoilerKlepStatus" value="Dicht" class="px-4 py-2 rounded-lg transition-all
+                    @(Model.BoilerKlepStatus == "Dicht" ? "bg-red-500 text-white" : "bg-gray-300 text-gray-700")">
+                    Dicht
+                </button>
+                <button name="BoilerKlepStatus" value="Automatisch" class="px-4 py-2 rounded-lg transition-all
+                    @(Model.BoilerKlepStatus == "Automatisch" ? "bg-yellow-500 text-white" : "bg-gray-300 text-gray-700")">
+                    Automatisch
+                </button>
+            </form>
+        </div>
+
+        <!-- Temperatuur Weergave -->
+        <div class="p-4 bg-gray-200 rounded-2xl">
+            <h2 class="text-lg font-semibold">Temperaturen</h2>
+            <div class="mt-2">
+                <p>🏊 Zwembad: <span class="font-bold">@Model.CurrentZwembadTemp°C / @Model.TargetZwembadTemp°C</span></p>
+                <p>🛢️ Buffertank: <span class="font-bold">@Model.CurrentBoilerWaterTemp°C / @Model.TargetBufferWaterTemp°C</span></p>
+                <p>🔥 Boiler: <span class="font-bold">@Model.CurrentBoilerWaterTemp°C / @Model.TargetBoilerWaterTemp°C</span></p>
+                <p>ZwembadWarmtePomp: <span class="font-bold">@Model.ZwembadWarmtePomp</span></p>
+                <p>AirwellWarmtePomp: <span class="font-bold">@Model.AirwellWarmtePomp</span></p>
+                <p>ZwembadKlep: <span class="font-bold">@Model.ZwembadKlepStatus</span></p>
+                <p>BoilerKlep: <span class="font-bold">@Model.BoilerKlepStatus</span></p>
+            </div>
+        </div>
+    </div>
+</div>
