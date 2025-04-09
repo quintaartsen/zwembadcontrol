@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Text;
 using ZwembadControl.Models;
 
 namespace ZwembadControl.Controllers
@@ -67,10 +68,10 @@ namespace ZwembadControl.Controllers
         }
 
         [HttpGet]
-        [Route("test")]
-        public async Task<string> Test(string ip)
+        [Route("GetDouchData")]
+        public async Task<string> GetDouchData()
         {
-            string url = $"http://{ip}/settings/all.xml";
+            string url = "http://192.168.172.102/settings/all.xml";
 
             using (HttpClient client = new HttpClient())
             {
@@ -96,6 +97,33 @@ namespace ZwembadControl.Controllers
                 {
                     Console.WriteLine($"An error occurred: {ex.Message}");
                 }
+            }
+            return default;
+        }
+
+        [HttpGet]
+        [Route("StartSpoelen")]
+        public async Task<string> StartSpoelen()
+        {
+            var url = "http://192.168.172.102/settings/Cycle.xml";
+            var client = new HttpClient();
+
+            // Prepare content with correct content type
+            var content = new StringContent("2", Encoding.UTF8, "text/plain");
+
+            try
+            {
+                var response = await client.PostAsync(url, content);
+                var responseBody = await response.Content.ReadAsStringAsync();
+
+                Console.WriteLine("Response Status: " + response.StatusCode);
+                Console.WriteLine("Response Body:");
+                Console.WriteLine(responseBody);
+                return response.StatusCode.ToString();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error occurred: " + ex.Message);
             }
             return default;
         }
