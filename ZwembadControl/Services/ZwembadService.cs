@@ -74,18 +74,7 @@ namespace ZwembadControl.Controllers
 
             if (priceLevel == PriceLevel.Expensive || priceLevel == PriceLevel.VeryExpensive)
             {
-                if (CurrentState.Instance.CurrentBoilerWaterTemp < 48)
-                {
-                    await CloseBoilerKlepAsync();
-                }
-                else
-                {
-                    await OpenBoilerKlepAsync();
-                }
-            }
-            else if (priceLevel == PriceLevel.Normal)
-            {
-                if (CurrentState.Instance.CurrentBoilerWaterTemp >= 50 || CurrentState.Instance.CurrentBoilerWaterTemp < 48)
+                if (CurrentState.Instance.CurrentBoilerWaterTemp < 48 || CurrentState.Instance.CurrentBoilerWaterTemp >= 50)
                 {
                     await CloseBoilerKlepAsync();
                 }
@@ -96,7 +85,7 @@ namespace ZwembadControl.Controllers
             }
             else
             {
-                if (CurrentState.Instance.CurrentBoilerWaterTemp >= 55 || CurrentState.Instance.CurrentBoilerWaterTemp < 48)
+                if (CurrentState.Instance.CurrentBoilerWaterTemp >= 50 || CurrentState.Instance.CurrentBoilerWaterTemp < 48)
                 {
                     await CloseBoilerKlepAsync();
                 }
