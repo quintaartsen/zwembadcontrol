@@ -68,12 +68,12 @@ namespace ZwembadControl.Controllers
 
         [HttpGet]
         [Route("test")]
-        public async void test()
+        public async Task<List<string>> test()
         {
+            List<string> result = new List<string>();
             using (HttpClient client = new HttpClient())
             {
 
-                List<string> result = new List<string>();
                 // Loop door alle IP-adressen van 192.168.0.0 tot 192.168.254.254
                 for (int i = 0; i <= 254; i++)
                 {
@@ -105,6 +105,7 @@ namespace ZwembadControl.Controllers
                     }
                 }
             }
+            return result;
         }
     }
 }
