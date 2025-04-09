@@ -68,7 +68,7 @@ namespace ZwembadControl.Controllers
 
         [HttpGet]
         [Route("test")]
-        public async Task<List<string>> Test(string ip)
+        public async Task<string> Test(string ip)
         {
             string url = $"http://{ip}/settings/all.xml";
 
