@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using ZwembadControl.Models;
 
 namespace ZwembadControl.Controllers
@@ -64,5 +65,45 @@ namespace ZwembadControl.Controllers
         {
             await _service.StopZwembadWarmtePompasync();
         }
+
+        [HttpGet]
+        [Route("test")]
+        public async void test()
+        {
+            using (HttpClient client = new HttpClient())
+            {
+
+                List<string> result = new List<string>();
+                // Loop door alle IP-adressen van 192.168.0.0 tot 192.168.254.254
+                for (int i = 0; i <= 254; i++)
+                {
+                    for (int j = 0; j <= 254; j++)
+                    {
+                        string ip = $"192.168.{i}.{j}";
+                        string url = $"http://{ip}/settings/all.xml";
+
+                        // Probeer de data op te halen
+                        try
+                        {
+                            HttpResponseMessage response = await client.GetAsync(url);
+
+                            // Controleer of de aanvraag succesvol was
+                            if (response.IsSuccessStatusCode)
+                            {
+                                result.Add(ip);
+                                Console.WriteLine($"Succesvol opgehaald: {url}");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"Fout bij ophalen: {url} - Statuscode: {response.StatusCode}");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Fout bij verbinden met {url}: {ex.Message}");
+                        }
+                    }
+                }
+            }
     }
 }

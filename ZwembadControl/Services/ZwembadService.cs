@@ -190,7 +190,8 @@ namespace ZwembadControl.Controllers
             var value = 35;
             if (CurrentState.Instance.TargetBoilerWaterTemp != value)
             {
-                await airWellConnector.SetTemp(value);
+                await airWellConnector.SetBoilerTemp(value);
+                await airWellConnector.SetWaterTemp(value);
             }
         }
 
@@ -199,7 +200,8 @@ namespace ZwembadControl.Controllers
             var value = 50;
             if (CurrentState.Instance.TargetBoilerWaterTemp != value)
             {
-                await airWellConnector.SetTemp(value);
+                await airWellConnector.SetBoilerTemp(value);
+                await airWellConnector.SetWaterTemp(value);
             }
         }
 
@@ -208,7 +210,8 @@ namespace ZwembadControl.Controllers
             var value = 55;
             if (CurrentState.Instance.TargetBoilerWaterTemp != value)
             {
-                await airWellConnector.SetTemp(value);
+                await airWellConnector.SetBoilerTemp(value);
+                await airWellConnector.SetWaterTemp(value);
             }
         }
 

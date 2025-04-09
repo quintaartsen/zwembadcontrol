@@ -163,7 +163,7 @@ namespace ZwembadControl.Connectors
             return default;
         }
 
-        internal async Task SetTemp(int value)
+        internal async Task SetBoilerTemp(int value)
         {
             var requestData = new
             {
@@ -175,6 +175,29 @@ namespace ZwembadControl.Connectors
                     new
                     {
                         key = "hotWaterTemperature",
+                        pathKey = "properties",
+                        value = value
+                    }
+                }
+                },
+                deviceId = 113255
+            };
+
+            await ActionRequest(requestData);
+        }
+
+        internal async Task SetWaterTemp(int value)
+        {
+            var requestData = new
+            {
+                encoderCommand = new
+                {
+                    id = 390,
+                    parameters = new[]
+               {
+                    new
+                    {
+                        key = "temperatureZone1",
                         pathKey = "properties",
                         value = value
                     }

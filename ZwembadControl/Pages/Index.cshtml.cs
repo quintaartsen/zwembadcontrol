@@ -34,7 +34,6 @@
 
         public async Task OnGetAsync()
         {
-            await _service.GetDataAsync();
             UpdateDataModel();
         }
 
