@@ -71,7 +71,6 @@ namespace ZwembadControl.Controllers
         {
 
             ///////////////////////////////////////Boiler Klep////////////////////////////////////////////////////////////////////////
-
             if (priceLevel == PriceLevel.Expensive || priceLevel == PriceLevel.VeryExpensive)
             {
                 if (CurrentState.Instance.CurrentBoilerWaterTemp < 48 || CurrentState.Instance.CurrentBoilerWaterTemp >= 50)
@@ -97,7 +96,6 @@ namespace ZwembadControl.Controllers
 
 
             ///////////////////////////////////////Airwell Warmte Pomp////////////////////////////////////////////////////////////////////////
-
             if (priceLevel == PriceLevel.Expensive || priceLevel == PriceLevel.VeryExpensive)
             {
                 if (CurrentState.Instance.CurrentBoilerWaterTemp < 40)
@@ -137,9 +135,9 @@ namespace ZwembadControl.Controllers
             else if (priceLevel == PriceLevel.Normal)
             {
                 await CloseZwembadKlepAsync();
-                if (hyconData.CurrentTempature < (hyconData.TargetTempature))
+                if (hyconData.CurrentTempature < hyconData.TargetTempature)
                 {
-                    await OpenZwembadKlepAsync();
+                    await StartZwembadWarmtePompasync();
                 }
                 else
                 {
