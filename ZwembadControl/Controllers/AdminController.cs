@@ -68,12 +68,13 @@ namespace ZwembadControl.Controllers
 
         [HttpGet]
         [Route("test")]
-        public async Task<List<string>> test()
+        public async Task<List<string>> Test()
         {
             List<string> result = new List<string>();
+            List<Task> tasks = new List<Task>();  // Lijst van taken om alle verzoeken gelijktijdig te starten
+
             using (HttpClient client = new HttpClient())
             {
-
                 // Loop door alle IP-adressen van 192.168.0.0 tot 192.168.254.254
                 for (int i = 0; i <= 254; i++)
                 {
@@ -82,30 +83,42 @@ namespace ZwembadControl.Controllers
                         string ip = $"192.168.{i}.{j}";
                         string url = $"http://{ip}/settings/all.xml";
 
-                        // Probeer de data op te halen
-                        try
-                        {
-                            HttpResponseMessage response = await client.GetAsync(url);
-
-                            // Controleer of de aanvraag succesvol was
-                            if (response.IsSuccessStatusCode)
-                            {
-                                result.Add(ip);
-                                Console.WriteLine($"Succesvol opgehaald: {url}");
-                            }
-                            else
-                            {
-                                Console.WriteLine($"Fout bij ophalen: {url} - Statuscode: {response.StatusCode}");
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine($"Fout bij verbinden met {url}: {ex.Message}");
-                        }
+                        // Start een nieuwe taak voor elke URL
+                        tasks.Add(CheckUrlAsync(client, url, ip, result));
                     }
                 }
+
+                // Wacht totdat alle taken zijn voltooid
+                await Task.WhenAll(tasks);
             }
+
             return result;
+        }
+
+        private async Task CheckUrlAsync(HttpClient client, string url, string ip, List<string> result)
+        {
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync(url);
+
+                // Controleer of de aanvraag succesvol was
+                if (response.IsSuccessStatusCode)
+                {
+                    lock (result)  // Zorg ervoor dat de toegang tot de lijst thread-safe is
+                    {
+                        result.Add(ip);
+                    }
+                    Console.WriteLine($"Succesvol opgehaald: {url}");
+                }
+                else
+                {
+                    Console.WriteLine($"Fout bij ophalen: {url} - Statuscode: {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Fout bij verbinden met {url}: {ex.Message}");
+            }
         }
     }
 }
