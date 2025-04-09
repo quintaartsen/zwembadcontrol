@@ -104,7 +104,7 @@ namespace ZwembadControl.Controllers
                 }
                 else
                 {
-                    await StopAirwellWarmtePompasync();
+                    //await StopAirwellWarmtePompasync();
                     await SetLowTempAirwellWarmtePompasync();
                 }
             }
