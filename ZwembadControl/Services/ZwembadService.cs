@@ -73,7 +73,7 @@ namespace ZwembadControl.Controllers
             ///////////////////////////////////////Boiler Klep////////////////////////////////////////////////////////////////////////
             if (priceLevel == PriceLevel.Expensive || priceLevel == PriceLevel.VeryExpensive)
             {
-                if (CurrentState.Instance.CurrentBoilerWaterTemp < 48 || CurrentState.Instance.CurrentBoilerWaterTemp >= 50)
+                if (CurrentState.Instance.CurrentBoilerWaterTemp >= 50)
                 {
                     await CloseBoilerKlepAsync();
                 }
@@ -84,7 +84,7 @@ namespace ZwembadControl.Controllers
             }
             else
             {
-                if (CurrentState.Instance.CurrentBoilerWaterTemp >= 50 || CurrentState.Instance.CurrentBoilerWaterTemp < 48)
+                if (CurrentState.Instance.CurrentBoilerWaterTemp >= 50)
                 {
                     await CloseBoilerKlepAsync();
                 }
@@ -101,6 +101,7 @@ namespace ZwembadControl.Controllers
                 if (CurrentState.Instance.CurrentBoilerWaterTemp < 40)
                 {
                     await StartAirwellWarmtePompasync();
+                    await SetNormalTempAirwellWarmtePompasync();
                 }
                 else
                 {
@@ -185,7 +186,7 @@ namespace ZwembadControl.Controllers
 
         public async Task SetLowTempAirwellWarmtePompasync()
         {
-            var value = 35;
+            var value = 45;
             if (CurrentState.Instance.TargetBoilerWaterTemp != value)
             {
                 await airWellConnector.SetBoilerTemp(value);
