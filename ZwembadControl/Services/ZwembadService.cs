@@ -135,13 +135,14 @@ namespace ZwembadControl.Controllers
             }
             else if (priceLevel == PriceLevel.Normal)
             {
-                await CloseZwembadKlepAsync();
                 if (hyconData.CurrentTempature < hyconData.TargetTempature)
                 {
                     await StartZwembadWarmtePompasync();
+                    await OpenZwembadKlepAsync();
                 }
                 else
                 {
+                    await CloseZwembadKlepAsync();
                     await StopZwembadWarmtePompasync();
                 }
             }
@@ -158,6 +159,11 @@ namespace ZwembadControl.Controllers
                     await CloseZwembadKlepAsync();
 
                 }
+            }
+
+            if (CurrentState.Instance.CurrentBoilerWaterTemp < 48)
+            {
+                await CloseZwembadKlepAsync();
             }
 
             StoreState();
@@ -186,7 +192,7 @@ namespace ZwembadControl.Controllers
 
         public async Task SetLowTempAirwellWarmtePompasync()
         {
-            var value = 50;
+            var value = 55;
             if (CurrentState.Instance.TargetBoilerWaterTemp != value)
             {
                 await airWellConnector.SetBoilerTemp(value);
@@ -196,7 +202,7 @@ namespace ZwembadControl.Controllers
 
         public async Task SetNormalTempAirwellWarmtePompasync()
         {
-            var value = 50;
+            var value = 55;
             if (CurrentState.Instance.TargetBoilerWaterTemp != value)
             {
                 await airWellConnector.SetBoilerTemp(value);
