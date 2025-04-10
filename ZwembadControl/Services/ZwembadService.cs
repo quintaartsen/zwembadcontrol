@@ -49,6 +49,11 @@ namespace ZwembadControl.Controllers
         }
 
 
+        public List<DateModel> GetStateHistory()
+        {
+            return database.GetAll();
+        }
+
         public async Task GetDataAsync()
         {
             var priceLevel = await tibberConnector.GetPriceLevel();

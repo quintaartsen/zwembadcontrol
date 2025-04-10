@@ -69,10 +69,7 @@ namespace ZwembadControl.Controllers
 
         [HttpGet]
         [Route("GetStateHistory")]
-        public async Task<DateModel> GetStateHistory()
-        {
-            return CurrentState.Instance;
-        }
+        public List<DateModel> GetStateHistory() => _service.GetStateHistory();
 
         [HttpGet]
         [Route("GetDouchData")]
