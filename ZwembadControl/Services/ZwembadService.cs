@@ -186,7 +186,7 @@ namespace ZwembadControl.Controllers
 
         public async Task SetLowTempAirwellWarmtePompasync()
         {
-            var value = 45;
+            var value = 50;
             if (CurrentState.Instance.TargetBoilerWaterTemp != value)
             {
                 await airWellConnector.SetBoilerTemp(value);
