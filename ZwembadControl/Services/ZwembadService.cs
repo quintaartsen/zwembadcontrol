@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using Quartz;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.Intrinsics.Arm;
 using Tibber.Sdk;
 using ZwembadControl.Connectors;
@@ -72,8 +73,39 @@ namespace ZwembadControl.Controllers
         }
 
 
-        private async Task ExecuteChangeAsync(PriceLevel priceLevel, AirWellData airWellData, HyconData hyconData)
+        private PriceLevel? CalculateCurrentPriceLevel(ICollection<Price> prices, Price currentPrice)
         {
+            if (prices == null)
+                return currentPrice.Level;
+
+            PriceLevel? currentPriceLevel = null;
+
+            foreach (var price in prices)
+            {
+                if (price.StartsAt == currentPrice.StartsAt)
+                {
+                    currentPriceLevel = price.Level;
+                    continue;
+                }
+
+                if (currentPriceLevel.HasValue && price.Level.HasValue)
+                {
+                    if (currentPriceLevel.Value != price.Level.Value)
+                    {
+                        var result = price.Level > currentPriceLevel;
+
+                        return currentPrice.Level == PriceLevel.Normal && result ? PriceLevel.Expensive : currentPrice.Level;
+
+                    }
+                }
+            }
+
+            return currentPrice.Level;
+        }
+
+        private async Task ExecuteChangeAsync(PriceInfo priceInfo, AirWellData airWellData, HyconData hyconData)
+        {
+            var priceLevel = CalculateCurrentPriceLevel(priceInfo.Today, priceInfo.Current);
 
             ///////////////////////////////////////Boiler Klep////////////////////////////////////////////////////////////////////////
             if (priceLevel == PriceLevel.Expensive || priceLevel == PriceLevel.VeryExpensive)
