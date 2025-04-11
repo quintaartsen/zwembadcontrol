@@ -57,9 +57,11 @@ namespace ZwembadControl.Controllers
 
         public async Task GetDataAsync()
         {
-            var priceLevel = await tibberConnector.GetPriceLevel();
+            var priceInfo = await tibberConnector.GetPriceLevel();
             var airWellData = await airWellConnector.GetDataAsync();
             var hyconData = await hyconConnector.GetDataAsync();
+
+            PriceLevel priceLevel = CalculateCurrentPriceLevel(priceInfo.Today, priceInfo.Current).GetValueOrDefault(PriceLevel.Normal);
 
             CurrentState.Instance.TargetBoilerWaterTemp = airWellData.Airwell_MIDEA_CAC_Basic_0_hotWaterTemperature_0__0_7_0_last;
             CurrentState.Instance.CurrentBoilerWaterTemp = airWellData.Airwell_MIDEA_CAC_Basic_0_waterTankTemperature_0__0_21_0_last;
@@ -103,10 +105,8 @@ namespace ZwembadControl.Controllers
             return currentPrice.Level;
         }
 
-        private async Task ExecuteChangeAsync(PriceInfo priceInfo, AirWellData airWellData, HyconData hyconData)
+        private async Task ExecuteChangeAsync(PriceLevel priceLevel, AirWellData airWellData, HyconData hyconData)
         {
-            var priceLevel = CalculateCurrentPriceLevel(priceInfo.Today, priceInfo.Current);
-
             ///////////////////////////////////////Boiler Klep////////////////////////////////////////////////////////////////////////
             if (priceLevel == PriceLevel.Expensive || priceLevel == PriceLevel.VeryExpensive)
             {
