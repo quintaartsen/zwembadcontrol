@@ -71,7 +71,7 @@ namespace ZwembadControl.Controllers
             CurrentState.Instance.CurrentZwembadWaterTemp = hyconData.CurrentTempature;
             CurrentState.Instance.currentDateTime = DateTime.UtcNow;
 
-            await ExecuteChangeAsync(priceLevel, airWellData, hyconData);
+         //   await ExecuteChangeAsync(priceLevel, airWellData, hyconData);
         }
 
 
@@ -229,8 +229,8 @@ namespace ZwembadControl.Controllers
 
         public async Task SetLowTempAirwellWarmtePompasync()
         {
-            var value = 55;
-            if (CurrentState.Instance.TargetBoilerWaterTemp != value)
+            var value = 50;
+            if (CurrentState.Instance.TargetBoilerWaterTemp != value || CurrentState.Instance.TargetBufferWaterTemp != value)
             {
                 await airWellConnector.SetBoilerTemp(value);
                 await airWellConnector.SetWaterTemp(value);
@@ -239,8 +239,8 @@ namespace ZwembadControl.Controllers
 
         public async Task SetNormalTempAirwellWarmtePompasync()
         {
-            var value = 55;
-            if (CurrentState.Instance.TargetBoilerWaterTemp != value)
+            var value = 50;
+            if (CurrentState.Instance.TargetBoilerWaterTemp != value || CurrentState.Instance.TargetBufferWaterTemp != value)
             {
                 await airWellConnector.SetBoilerTemp(value);
                 await airWellConnector.SetWaterTemp(value);
@@ -250,7 +250,7 @@ namespace ZwembadControl.Controllers
         public async Task SetHighTempAirwellWarmtePompasync()
         {
             var value = 55;
-            if (CurrentState.Instance.TargetBoilerWaterTemp != value)
+            if (CurrentState.Instance.TargetBoilerWaterTemp != value || CurrentState.Instance.TargetBufferWaterTemp != value)
             {
                 await airWellConnector.SetBoilerTemp(value);
                 await airWellConnector.SetWaterTemp(value);
