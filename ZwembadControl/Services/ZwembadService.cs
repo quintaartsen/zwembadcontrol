@@ -26,8 +26,7 @@ namespace ZwembadControl.Controllers
         private readonly int LegionellaBoiler = 1;
         private readonly int BoilerKlepOpen = 2;
         private readonly int BoilerKlepDicht = 3;
-
-        private readonly double BufferRangeZwembad = 0.5;
+        private readonly double BufferRangeZwembad = 0.4;
 
         public ZwembadService(RelayConnector relayConnector, AirWellConnector airWellConnector, TibberConnector tibberConnector, HyconConnector hyconConnector)
         {
