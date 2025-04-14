@@ -159,7 +159,16 @@ namespace ZwembadControl.Controllers
             ///////////////////////////////////////Zwembad temperature////////////////////////////////////////////////////////////////////////
             if (priceLevel == PriceLevel.Expensive || priceLevel == PriceLevel.VeryExpensive)
             {
-                await CloseZwembadKlepAsync();
+
+                if (hyconData.CurrentTempature < (hyconData.TargetTempature - (2 * BufferRangeZwembad)))
+                {
+                    await OpenZwembadKlepAsync();
+                }else
+                {
+                    await CloseZwembadKlepAsync();
+                }
+
+
                 if (hyconData.CurrentTempature < (hyconData.TargetTempature - BufferRangeZwembad))
                 {
                     await StartZwembadWarmtePompasync();
