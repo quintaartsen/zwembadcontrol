@@ -93,7 +93,7 @@ namespace ZwembadControl.Controllers
                 {
                     if (currentPriceLevel.Value != price.Level.Value)
                     {
-                        var result = price.Level > currentPriceLevel;
+                        var result = price.Level < currentPriceLevel;
 
                         return currentPrice.Level == PriceLevel.Normal && result ? PriceLevel.Expensive : currentPrice.Level;
 
