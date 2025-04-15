@@ -237,7 +237,7 @@ namespace ZwembadControl.Controllers
 
         public async Task SetLowTempAirwellWarmtePompasync()
         {
-            var value = 60;
+            var value = 50;
             if (CurrentState.Instance.TargetBoilerWaterTemp != value || CurrentState.Instance.TargetBufferWaterTemp != value)
             {
                 await airWellConnector.SetBoilerTemp(value);
@@ -247,7 +247,7 @@ namespace ZwembadControl.Controllers
 
         public async Task SetNormalTempAirwellWarmtePompasync()
         {
-            var value = 60;
+            var value = 50;
             if (CurrentState.Instance.TargetBoilerWaterTemp != value || CurrentState.Instance.TargetBufferWaterTemp != value)
             {
                 await airWellConnector.SetBoilerTemp(value);
@@ -257,7 +257,7 @@ namespace ZwembadControl.Controllers
 
         public async Task SetHighTempAirwellWarmtePompasync()
         {
-            var value = 60;
+            var value = 55;
             if (CurrentState.Instance.TargetBoilerWaterTemp != value || CurrentState.Instance.TargetBufferWaterTemp != value)
             {
                 await airWellConnector.SetBoilerTemp(value);
