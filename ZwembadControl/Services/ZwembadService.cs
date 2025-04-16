@@ -70,7 +70,7 @@ namespace ZwembadControl.Controllers
             CurrentState.Instance.CurrentZwembadWaterTemp = hyconData.CurrentTempature;
             CurrentState.Instance.currentDateTime = DateTime.UtcNow;
 
-         //   await ExecuteChangeAsync(priceLevel, airWellData, hyconData);
+            await ExecuteChangeAsync(priceLevel, airWellData, hyconData);
         }
 
 
