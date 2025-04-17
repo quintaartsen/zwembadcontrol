@@ -68,6 +68,20 @@ namespace ZwembadControl.Controllers
         }
 
         [HttpGet]
+        [Route("StartL")]
+        public async void Startl()
+        {
+            await _service.StartLegionellasync();
+        }
+
+        [HttpGet]
+        [Route("Stopl")]
+        public async void Stopl()
+        {
+            await _service.StartLegionellasync();
+        }
+
+        [HttpGet]
         [Route("GetStateHistory")]
         public List<DateModel> GetStateHistory() => _service.GetStateHistory();
 
