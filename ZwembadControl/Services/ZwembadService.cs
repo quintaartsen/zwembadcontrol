@@ -1,9 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
-using Quartz;
-using System.Diagnostics;
-using System.IO;
-using System.Runtime.Intrinsics.Arm;
 using Tibber.Sdk;
 using ZwembadControl.Connectors;
 using ZwembadControl.Models;
@@ -106,56 +101,71 @@ namespace ZwembadControl.Controllers
 
         private async Task ExecuteChangeAsync(PriceLevel priceLevel, AirWellData airWellData, HyconData hyconData)
         {
-            ///////////////////////////////////////Boiler Klep////////////////////////////////////////////////////////////////////////
-            if (priceLevel == PriceLevel.Expensive || priceLevel == PriceLevel.VeryExpensive)
+            if (CurrentState.Instance.LegionellaBoiler)
             {
-                if (CurrentState.Instance.CurrentBoilerWaterTemp >= 50)
+                if (CurrentState.Instance.CurrentBoilerWaterTemp < 60)
                 {
-                    await CloseBoilerKlepAsync();
+                    await airWellConnector.SetBoilerTemp(60);
+                    await airWellConnector.SetWaterTemp(60);
                 }
                 else
                 {
-                    await OpenBoilerKlepAsync();
+                    await SetNormalTempAirwellWarmtePompasync();
+                    await CloseBoilerKlepAsync();
                 }
             }
             else
             {
-                if (CurrentState.Instance.CurrentBoilerWaterTemp >= 50)
+                ///////////////////////////////////////Boiler Klep////////////////////////////////////////////////////////////////////////
+                if (priceLevel == PriceLevel.Expensive || priceLevel == PriceLevel.VeryExpensive)
                 {
-                    await CloseBoilerKlepAsync();
+                    if (CurrentState.Instance.CurrentBoilerWaterTemp >= 50)
+                    {
+                        await CloseBoilerKlepAsync();
+                    }
+                    else
+                    {
+                        await OpenBoilerKlepAsync();
+                    }
                 }
                 else
                 {
-                    await OpenBoilerKlepAsync();
+                    if (CurrentState.Instance.CurrentBoilerWaterTemp >= 50)
+                    {
+                        await CloseBoilerKlepAsync();
+                    }
+                    else
+                    {
+                        await OpenBoilerKlepAsync();
+                    }
                 }
-            }
 
 
-            ///////////////////////////////////////Airwell Warmte Pomp////////////////////////////////////////////////////////////////////////
-            if (priceLevel == PriceLevel.Expensive || priceLevel == PriceLevel.VeryExpensive)
-            {
-                if (CurrentState.Instance.CurrentBoilerWaterTemp < 40)
+                ///////////////////////////////////////Airwell Warmte Pomp////////////////////////////////////////////////////////////////////////
+                if (priceLevel == PriceLevel.Expensive || priceLevel == PriceLevel.VeryExpensive)
+                {
+                    if (CurrentState.Instance.CurrentBoilerWaterTemp < 40)
+                    {
+                        await StartAirwellWarmtePompasync();
+                        await SetNormalTempAirwellWarmtePompasync();
+                    }
+                    else
+                    {
+                        //await StopAirwellWarmtePompasync();
+                        await SetLowTempAirwellWarmtePompasync();
+                    }
+                }
+                else if (priceLevel == PriceLevel.Normal)
                 {
                     await StartAirwellWarmtePompasync();
                     await SetNormalTempAirwellWarmtePompasync();
                 }
                 else
                 {
-                    //await StopAirwellWarmtePompasync();
-                    await SetLowTempAirwellWarmtePompasync();
+                    await StartAirwellWarmtePompasync();
+                    await SetHighTempAirwellWarmtePompasync();
                 }
             }
-            else if (priceLevel == PriceLevel.Normal)
-            {
-                await StartAirwellWarmtePompasync();
-                await SetNormalTempAirwellWarmtePompasync();
-            }
-            else
-            {
-                await StartAirwellWarmtePompasync();
-                await SetHighTempAirwellWarmtePompasync();
-            }
-
             ///////////////////////////////////////Zwembad temperature////////////////////////////////////////////////////////////////////////
             if (priceLevel == PriceLevel.Expensive || priceLevel == PriceLevel.VeryExpensive)
             {
@@ -282,12 +292,14 @@ namespace ZwembadControl.Controllers
         {
             CurrentState.Instance.LegionellaBoiler = true;
             relayConnector.CloseRelay(LegionellaBoiler);
+            await OpenBoilerKlepMaxAsync();
         }
 
         public async Task StopLegionellasync()
         {
-            CurrentState.Instance.LegionellaBoiler = false;
             relayConnector.OpenRelay(LegionellaBoiler);
+            await CloseBoilerKlepAsync();
+            CurrentState.Instance.LegionellaBoiler = false;
         }
 
         public async Task OpenBoilerKlepAsync()
@@ -314,6 +326,25 @@ namespace ZwembadControl.Controllers
             }
         }
 
+        public async Task OpenBoilerKlepMaxAsync()
+        {
+            CurrentState.Instance.BoilerKlepOpen = true;
+            relayConnector.CloseRelay(BoilerKlepOpen);
+            await Task.Delay(32000);
+            relayConnector.OpenRelay(BoilerKlepOpen);
+        }
+
+        public async Task CloseBoilerKlepMaxAsync()
+        {
+            if (CurrentState.Instance.BoilerKlepOpen != false)
+            {
+                relayConnector.CloseRelay(BoilerKlepDicht);
+                await Task.Delay(32000);// full is 30 seconde
+                relayConnector.OpenRelay(BoilerKlepDicht);
+                CurrentState.Instance.BoilerKlepOpen = false;
+            }
+        }
+
         public async Task OpenZwembadKlepAsync()
         {
             CurrentState.Instance.ZwembadKlepOpen = true;
@@ -328,18 +359,6 @@ namespace ZwembadControl.Controllers
 
             relayConnector.OpenRelay(ZwembadKlepOpen);
             relayConnector.OpenRelay(ZwembadKlepDicht);
-        }
-
-        public void StartSpoelen()
-        {
-/*            _klepConnector.CloseBoiler();
-            _klepConnector.StartLegionellaBoiler();*/
-        }
-
-        public void StopSpoelen()
-        {
-/*            _klepConnector.CloseBoiler();
-            _klepConnector.StopLegionellaBoiler();*/
         }
     }
 }
