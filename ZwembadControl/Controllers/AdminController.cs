@@ -78,7 +78,7 @@ namespace ZwembadControl.Controllers
         [Route("Stopl")]
         public async void Stopl()
         {
-            await _service.StartLegionellasync();
+            await _service.StopLegionellasync();
         }
 
         [HttpGet]
