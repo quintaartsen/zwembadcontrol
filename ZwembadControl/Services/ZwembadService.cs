@@ -101,7 +101,7 @@ namespace ZwembadControl.Controllers
 
         private async Task ExecuteChangeAsync(PriceLevel priceLevel, AirWellData airWellData, HyconData hyconData)
         {
-/*            if (CurrentState.Instance.LegionellaBoiler)
+            if (CurrentState.Instance.LegionellaBoiler)
             {
                 if (CurrentState.Instance.CurrentBoilerWaterTemp < 60)
                 {
@@ -115,7 +115,7 @@ namespace ZwembadControl.Controllers
                 }
             }
             else
-            {*/
+            {
                 ///////////////////////////////////////Boiler Klep////////////////////////////////////////////////////////////////////////
                 if (priceLevel == PriceLevel.Expensive || priceLevel == PriceLevel.VeryExpensive)
                 {
@@ -165,7 +165,7 @@ namespace ZwembadControl.Controllers
                     await StartAirwellWarmtePompasync();
                     await SetHighTempAirwellWarmtePompasync();
                 }
-          //  }
+            }
             ///////////////////////////////////////Zwembad temperature////////////////////////////////////////////////////////////////////////
             if (priceLevel == PriceLevel.Expensive || priceLevel == PriceLevel.VeryExpensive)
             {
