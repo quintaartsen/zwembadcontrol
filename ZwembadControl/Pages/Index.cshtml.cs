@@ -51,11 +51,6 @@
 
         public async Task OnPostAsync()
         {
-            if (ZwembadKlepMode != null)
-            {
-                ZwembadKlepStatus = ZwembadKlepMode;
-            }
-
             if(Mode != CurrentState.Instance.Mode && Mode != null)
             {
                 CurrentState.Instance.Mode = Mode;
@@ -128,7 +123,7 @@
 
             if (airwellMode != CurrentState.Instance.airwellMode && airwellMode != null)
             {
-                CurrentState.Instance.airwellMode = ZwembadMode;
+                CurrentState.Instance.airwellMode = airwellMode;
 
                 switch (ZwembadMode)
                 {
