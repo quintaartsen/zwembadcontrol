@@ -140,6 +140,13 @@
             TargetBoilerWaterTemp = CurrentState.Instance.TargetBoilerWaterTemp;
             CurrentBoilerWaterTemp = CurrentState.Instance.CurrentBoilerWaterTemp;
             CurrentPriceLevel = CurrentState.Instance.CurrentPriceLevel;
+
+            Mode = CurrentState.Instance.Mode;
+            ZwembadKlepMode = CurrentState.Instance.ZwembadKlepMode;
+            ZwembadMode = CurrentState.Instance.ZwembadMode;
+            airwellMode = CurrentState.Instance.airwellMode;
+            boilerMode = CurrentState.Instance.boilerMode;
+
         }
     }
 }
