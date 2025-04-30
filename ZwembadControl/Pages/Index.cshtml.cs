@@ -11,6 +11,8 @@
         [BindProperty]
         public string Mode { get; set; }
         [BindProperty]
+        public string Spoelen { get; set; }
+        [BindProperty]
         public string ZwembadKlepMode { get; set; }
         [BindProperty]
         public string ZwembadMode { get; set; }
@@ -57,6 +59,20 @@
             if(Mode != CurrentState.Instance.Mode && Mode != null)
             {
                 CurrentState.Instance.Mode = Mode;
+            }
+
+            if (Spoelen != CurrentState.Instance.Spoelen && Spoelen != null)
+            {
+                CurrentState.Instance.Spoelen = Spoelen;
+
+                switch (Spoelen)
+                {
+                    case "aan":
+                        await _service.StartLegionellasync();
+                        break;
+                    case "uit":
+                        break;
+                }
             }
 
             if (ZwembadKlepMode != CurrentState.Instance.ZwembadKlepMode && ZwembadKlepMode != null)
@@ -112,7 +128,7 @@
 
             if (airwellMode != CurrentState.Instance.airwellMode && airwellMode != null)
             {
-                CurrentState.Instance.ZwembadMode = ZwembadMode;
+                CurrentState.Instance.airwellMode = ZwembadMode;
 
                 switch (ZwembadMode)
                 {
@@ -145,6 +161,7 @@
             CurrentPriceLevel = CurrentState.Instance.CurrentPriceLevel;
 
             Mode = CurrentState.Instance.Mode;
+            Spoelen = CurrentState.Instance.Spoelen;
             ZwembadKlepMode = CurrentState.Instance.ZwembadKlepMode;
             ZwembadMode = CurrentState.Instance.ZwembadMode;
             airwellMode = CurrentState.Instance.airwellMode;

@@ -27,6 +27,7 @@ namespace ZwembadControl.Models
         public string airwellMode { get; set; }
         public string klepMode { get; set; }
         public string boilerMode { get; set; }
+        public string Spoelen { get;  set; }
     }
 
     public class CurrentState

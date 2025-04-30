@@ -207,11 +207,22 @@
                     <!-- Modus Schakelaar -->
                     <p>Modus</p>
                     <div class="flex justify-center space-x-4">
+                        <button type="submit" name="mode" value="Normaal" class="px-6 py-3 rounded-xl text-white font-semibold @(Model.Mode == "Normaal" ? "button-enabled" : "button-disabled")">
+                            Normaal
+                        </button>
                         <button type="submit" name="mode" value="Slim" class="px-6 py-3 rounded-xl text-white font-semibold @(Model.Mode == "Slim" ? "button-enabled" : "button-disabled")">
                             Slim
                         </button>
-                        <button type="submit" name="mode" value="Normaal" class="px-6 py-3 rounded-xl text-white font-semibold @(Model.Mode == "Normaal" ? "button-enabled" : "button-disabled")">
-                            Normaal
+                    </div>
+
+                    <!-- Legionella Schakelaar -->
+                    <p>Spoelen</p>
+                    <div class="flex justify-center space-x-4">
+                        <button type="submit" name="Spoelen" value="Aan" class="px-6 py-3 rounded-xl text-white font-semibold @(Model.Spoelen == "Aan" ? "button-enabled" : "button-disabled")">
+                            Aan
+                        </button>
+                        <button type="submit" name="Spoelen" value="Uit" class="px-6 py-3 rounded-xl text-white font-semibold @(Model.Spoelen == "Uit" ? "button-enabled" : "button-disabled")">
+                            Uit
                         </button>
                     </div>
 

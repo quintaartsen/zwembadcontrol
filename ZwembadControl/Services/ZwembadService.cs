@@ -110,6 +110,7 @@ namespace ZwembadControl.Controllers
                 if(CurrentState.Instance.CurrentBoilerWaterTemp >= 64)
                 {
                     CurrentState.Instance.LegionellaBoiler = false;
+                    CurrentState.Instance.Spoelen = "uit";
                     await acquaNetConnector.StartSpoelenAsync();
                     relayConnector.OpenRelay(LegionellaBoiler);
                 }
@@ -290,6 +291,7 @@ namespace ZwembadControl.Controllers
         public async Task StartLegionellasync()
         {
             CurrentState.Instance.LegionellaBoiler = true;
+            CurrentState.Instance.Spoelen = "aan";
             relayConnector.CloseRelay(LegionellaBoiler);
         }
 
