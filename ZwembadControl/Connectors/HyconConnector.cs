@@ -50,6 +50,12 @@ namespace ZwembadControl.Connectors
                 }
                 string setpointValue = default;
                 string currentValue = default;
+                string setpointValuePH = default;
+                string currentValuePH = default;
+                string setpointValueChloor = default;
+                string currentValueChloor = default;
+                string setpointValueFLow = default;
+                string currentValueFlow = default;
 
 
                 foreach (var row in rows)
@@ -63,18 +69,18 @@ namespace ZwembadControl.Connectors
                     }
                     if (cells != null && cells.Count >= 4 && cells[1].InnerText.Trim() == "pH")
                     {
-                        setpointValue = cells[2].InnerText.Trim();
-                        currentValue = cells[3].InnerText.Trim();
+                        setpointValuePH = cells[2].InnerText.Trim();
+                        currentValuePH = cells[3].InnerText.Trim();
                     }
                     if (cells != null && cells.Count >= 4 && cells[1].InnerText.Trim() == "Chloor")
                     {
-                        setpointValue = cells[2].InnerText.Trim();
-                        currentValue = cells[3].InnerText.Trim();
+                        setpointValueChloor = cells[2].InnerText.Trim();
+                        currentValueChloor = cells[3].InnerText.Trim();
                     }
                     if (cells != null && cells.Count >= 4 && cells[1].InnerText.Trim() == "Flow")
                     {
-                        setpointValue = cells[2].InnerText.Trim();
-                        currentValue = cells[3].InnerText.Trim();
+                        setpointValueFLow = cells[2].InnerText.Trim();
+                        currentValueFlow = cells[3].InnerText.Trim();
                     }
                 }
 
@@ -96,7 +102,13 @@ namespace ZwembadControl.Connectors
                 var hyconData = new HyconData
                 {
                     TargetTempature = targetTemp,
-                    CurrentTempature = currentTemp
+                    CurrentTempature = currentTemp,
+                    TargetPh = setpointValuePH,
+                    CurrentPh = currentValuePH,
+                    TargetChloor = setpointValueChloor,
+                    CurrentChloor = currentValueChloor,
+                    TargetFlow = setpointValueFLow,
+                    CurrentFlow = currentValueFlow
                 };
 
                 return hyconData;
