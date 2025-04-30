@@ -301,6 +301,13 @@ namespace ZwembadControl.Controllers
             relayConnector.CloseRelay(LegionellaBoiler);
         }
 
+        public async Task StopLegionellasync()
+        {
+            CurrentState.Instance.LegionellaBoiler = false;
+            CurrentState.Instance.Spoelen = "uit";
+            relayConnector.OpenRelay(LegionellaBoiler);
+        }
+
         public async Task OpenBoilerKlepAsync()
         {
             if (CurrentState.Instance.BoilerKlepOpen != true)

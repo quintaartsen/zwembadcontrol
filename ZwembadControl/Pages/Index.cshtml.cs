@@ -73,6 +73,7 @@
                         await _service.StartLegionellasync();
                         break;
                     case "uit":
+                        await _service.StopLegionellasync();
                         break;
                 }
             }
