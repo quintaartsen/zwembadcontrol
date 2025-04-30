@@ -49,14 +49,17 @@
 
         public async Task OnPostAsync()
         {
-            ZwembadKlepStatus = ZwembadKlepMode;
+            if (ZwembadKlepMode != null)
+            {
+                ZwembadKlepStatus = ZwembadKlepMode;
+            }
 
-            if(Mode != CurrentState.Instance.Mode)
+            if(Mode != CurrentState.Instance.Mode && Mode != null)
             {
                 CurrentState.Instance.Mode = Mode;
             }
 
-            if (ZwembadKlepMode != CurrentState.Instance.ZwembadKlepMode)
+            if (ZwembadKlepMode != CurrentState.Instance.ZwembadKlepMode && ZwembadKlepMode != null)
             {
                 CurrentState.Instance.ZwembadKlepMode = ZwembadKlepMode;
 
@@ -73,7 +76,7 @@
                 }
             }
 
-            if (boilerMode != CurrentState.Instance.boilerMode)
+            if (boilerMode != CurrentState.Instance.boilerMode && boilerMode != null)
             {
                 CurrentState.Instance.boilerMode = boilerMode;
 
@@ -90,7 +93,7 @@
                 }
             }
 
-            if (ZwembadMode != CurrentState.Instance.ZwembadMode)
+            if (ZwembadMode != CurrentState.Instance.ZwembadMode && ZwembadMode != null)
             {
                 CurrentState.Instance.ZwembadMode = ZwembadMode;
 
@@ -107,7 +110,7 @@
                 }
             }
 
-            if (airwellMode != CurrentState.Instance.airwellMode)
+            if (airwellMode != CurrentState.Instance.airwellMode && airwellMode != null)
             {
                 CurrentState.Instance.ZwembadMode = ZwembadMode;
 
