@@ -209,7 +209,7 @@
 
                     <!-- Modus Schakelaar -->
                     <p>Modus</p>
-                    <div class="flex justify-center space-x-4">
+                    <div class="flex justify-end space-x-4">
                         <button type="submit" name="mode" value="Normaal" class="px-6 py-3 rounded-xl text-white font-semibold @(Model.Mode == "Normaal" ? "button-enabled" : "button-disabled")">
                             Normaal
                         </button>
@@ -220,7 +220,7 @@
 
                     <!-- Legionella Schakelaar -->
                     <p>Spoelen</p>
-                    <div class="flex justify-center space-x-4">
+                    <div class="flex justify-end space-x-4">
                         <button type="submit" name="Spoelen" value="Aan" class="px-6 py-3 rounded-xl text-white font-semibold @(Model.Spoelen == "Aan" ? "button-enabled" : "button-disabled")">
                             Aan
                         </button>
@@ -231,7 +231,7 @@
 
                     <!-- Zwembad Warmtepomp Control -->
                     <p>ZwembadWarmtePomp</p>
-                    <div class="flex justify-center space-x-4">
+                    <div class="flex justify-end space-x-4">
                         <button type="submit" name="zwembadMode" value="Aan" class="px-6 py-3 rounded-xl text-white font-semibold @(Model.ZwembadMode == "Aan" ? "button-enabled" : "button-disabled")">
                             Aan
                         </button>
@@ -245,7 +245,7 @@
 
                     <!-- Airwell Warmtepomp Control -->
                     <p>AirwellWarmtePomp</p>
-                    <div class="flex justify-center space-x-4">
+                    <div class="flex justify-end space-x-4">
                         <button type="submit" name="airwellMode" value="Aan" class="px-6 py-3 rounded-xl text-white font-semibold @(Model.airwellMode == "Aan" ? "button-enabled" : "button-disabled")">
                             Aan
                         </button>
@@ -259,7 +259,7 @@
 
                     <!-- Zwembad Klep Control -->
                     <p>ZwembadKlep</p>
-                    <div class="flex justify-center space-x-4">
+                    <div class="flex justify-end space-x-4">
                         <button type="submit" name="zwembadKlepMode" value="open" class="px-6 py-3 rounded-xl text-white font-semibold @(Model.ZwembadKlepMode == "open" ? "button-enabled" : "button-disabled")">
                             Open
                         </button>
@@ -273,7 +273,7 @@
 
                     <!-- Boiler Klep Control -->
                     <p>BoilerKlep</p>
-                    <div class="flex justify-center space-x-4">
+                    <div class="flex justify-end space-x-4">
                         <button type="submit" name="boilerMode" value="open" class="px-6 py-3 rounded-xl text-white font-semibold @(Model.boilerMode == "open" ? "button-enabled" : "button-disabled")">
                             Open
                         </button>
