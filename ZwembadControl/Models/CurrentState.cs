@@ -28,6 +28,12 @@ namespace ZwembadControl.Models
         public string klepMode { get; set; }
         public string boilerMode { get; set; }
         public string Spoelen { get;  set; }
+        public string TargetZwembadWaterPH { get; set; }
+        public string CurrentZwembadWaterPH { get; set; }
+        public string TargetZwembadWaterChloor { get; set; }
+        public string CurrentZwembadWaterChloor { get; set; }
+        public string TargetZwembadWaterFlow { get; set; }
+        public string CurrentZwembadWaterFlow { get; set; }
     }
 
     public class CurrentState

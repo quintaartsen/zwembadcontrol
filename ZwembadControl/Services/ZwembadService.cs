@@ -65,6 +65,12 @@ namespace ZwembadControl.Controllers
             CurrentState.Instance.CurrentPriceLevel = priceLevel.ToString();
             CurrentState.Instance.TargetZwembadWaterTemp = hyconData.TargetTempature;
             CurrentState.Instance.CurrentZwembadWaterTemp = hyconData.CurrentTempature;
+            CurrentState.Instance.TargetZwembadWaterPH = hyconData.TargetPh;
+            CurrentState.Instance.CurrentZwembadWaterPH = hyconData.CurrentPh;
+            CurrentState.Instance.TargetZwembadWaterChloor = hyconData.TargetChloor;
+            CurrentState.Instance.CurrentZwembadWaterChloor = hyconData.CurrentChloor;
+            CurrentState.Instance.TargetZwembadWaterFlow = hyconData.TargetFlow;
+            CurrentState.Instance.CurrentZwembadWaterFlow = hyconData.CurrentFlow;
             CurrentState.Instance.currentDateTime = DateTime.UtcNow;
 
             await ExecuteChangeAsync(priceLevel, airWellData, hyconData);

@@ -13,6 +13,12 @@ namespace ZwembadControl.Connectors
     {
         public double TargetTempature { get; set; }
         public double CurrentTempature { get; set; }
+        public string TargetPh { get; set; }
+        public string CurrentPh { get; set; }
+        public string TargetChloor { get; set; }
+        public string CurrentChloor { get; set; }
+        public string TargetFlow { get; set; }
+        public string CurrentFlow { get; set; }
     }
 
     public class HyconConnector
@@ -51,6 +57,21 @@ namespace ZwembadControl.Connectors
                     var cells = row.SelectNodes("td");
 
                     if (cells != null && cells.Count >= 4 && cells[1].InnerText.Trim() == "Temp")
+                    {
+                        setpointValue = cells[2].InnerText.Trim();
+                        currentValue = cells[3].InnerText.Trim();
+                    }
+                    if (cells != null && cells.Count >= 4 && cells[1].InnerText.Trim() == "pH")
+                    {
+                        setpointValue = cells[2].InnerText.Trim();
+                        currentValue = cells[3].InnerText.Trim();
+                    }
+                    if (cells != null && cells.Count >= 4 && cells[1].InnerText.Trim() == "Chloor")
+                    {
+                        setpointValue = cells[2].InnerText.Trim();
+                        currentValue = cells[3].InnerText.Trim();
+                    }
+                    if (cells != null && cells.Count >= 4 && cells[1].InnerText.Trim() == "Flow")
                     {
                         setpointValue = cells[2].InnerText.Trim();
                         currentValue = cells[3].InnerText.Trim();

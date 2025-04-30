@@ -28,7 +28,14 @@
         public string AirwellWarmtePomp { get; set; }
 
         public double CurrentZwembadTemp { get; set; }
-        public double TargetZwembadTemp { get; set; } 
+        public double TargetZwembadTemp { get; set; }
+        public string TargetZwembadWaterPH { get; set; }
+        public string CurrentZwembadWaterPH { get; set; }
+        public string TargetZwembadWaterChloor { get; set; }
+        public string CurrentZwembadWaterChloor { get; set; }
+        public string TargetZwembadWaterFlow { get; set; }
+        public string CurrentZwembadWaterFlow { get; set; }
+
 
         public double TargetBufferWaterTemp { get; set; }
         public double TargetBoilerWaterTemp { get; set; }
@@ -150,6 +157,13 @@
 
             CurrentZwembadTemp = CurrentState.Instance.CurrentZwembadWaterTemp;
             TargetZwembadTemp = CurrentState.Instance.TargetZwembadWaterTemp;
+            CurrentZwembadWaterChloor = CurrentState.Instance.CurrentZwembadWaterChloor;
+            TargetZwembadWaterChloor = CurrentState.Instance.TargetZwembadWaterChloor;
+            CurrentZwembadWaterPH = CurrentState.Instance.CurrentZwembadWaterPH;
+            TargetZwembadWaterPH = CurrentState.Instance.TargetZwembadWaterPH;
+            CurrentZwembadWaterFlow = CurrentState.Instance.CurrentZwembadWaterFlow;
+            TargetZwembadWaterFlow = CurrentState.Instance.TargetZwembadWaterFlow;
+
             TargetBufferWaterTemp = CurrentState.Instance.TargetBufferWaterTemp;
             TargetBoilerWaterTemp = CurrentState.Instance.TargetBoilerWaterTemp;
             CurrentBoilerWaterTemp = CurrentState.Instance.CurrentBoilerWaterTemp;
