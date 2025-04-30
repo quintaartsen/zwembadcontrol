@@ -12,6 +12,7 @@ namespace ZwembadControl.Controllers
         private readonly AirWellConnector airWellConnector;
         private readonly TibberConnector tibberConnector;
         private readonly HyconConnector hyconConnector;
+        private readonly AcquaNetConnector acquaNetConnector;
 
         private readonly FileDatabase<DateModel> database;
 
@@ -23,12 +24,13 @@ namespace ZwembadControl.Controllers
         private readonly int BoilerKlepDicht = 3;
         private readonly double BufferRangeZwembad = 0.4;
 
-        public ZwembadService(RelayConnector relayConnector, AirWellConnector airWellConnector, TibberConnector tibberConnector, HyconConnector hyconConnector)
+        public ZwembadService(RelayConnector relayConnector, AirWellConnector airWellConnector, TibberConnector tibberConnector, HyconConnector hyconConnector, AcquaNetConnector acquaNetConnector)
         {
             this.relayConnector = relayConnector;
             this.airWellConnector = airWellConnector;
             this.tibberConnector = tibberConnector;
             this.hyconConnector = hyconConnector;
+            this.acquaNetConnector = acquaNetConnector;
 
             database = new FileDatabase<DateModel>("./state.data");
             var dataEntryPoint = database.GetAll();
@@ -101,71 +103,68 @@ namespace ZwembadControl.Controllers
 
         private async Task ExecuteChangeAsync(PriceLevel priceLevel, AirWellData airWellData, HyconData hyconData)
         {
-/*            if (CurrentState.Instance.LegionellaBoiler)
+
+            ///////////////////////////////////////Legionella mode////////////////////////////////////////////////////////////////////////
+            if (CurrentState.Instance.LegionellaBoiler)
             {
-                if (CurrentState.Instance.CurrentBoilerWaterTemp < 60)
+                if(CurrentState.Instance.CurrentBoilerWaterTemp >= 64)
                 {
-                    await airWellConnector.SetBoilerTemp(60);
-                    await airWellConnector.SetWaterTemp(60);
+                    CurrentState.Instance.LegionellaBoiler = false;
+                    await acquaNetConnector.StartSpoelenAsync();
+                    relayConnector.OpenRelay(LegionellaBoiler);
+                }
+            }
+
+            ///////////////////////////////////////Boiler Klep////////////////////////////////////////////////////////////////////////
+            if (priceLevel == PriceLevel.Expensive || priceLevel == PriceLevel.VeryExpensive)
+            {
+                if (CurrentState.Instance.CurrentBoilerWaterTemp >= 50)
+                {
+                    await CloseBoilerKlepAsync();
                 }
                 else
                 {
-                    await SetNormalTempAirwellWarmtePompasync();
-                    await CloseBoilerKlepAsync();
+                    await OpenBoilerKlepAsync();
                 }
             }
             else
-            {*/
-                ///////////////////////////////////////Boiler Klep////////////////////////////////////////////////////////////////////////
-                if (priceLevel == PriceLevel.Expensive || priceLevel == PriceLevel.VeryExpensive)
+            {
+                if (CurrentState.Instance.CurrentBoilerWaterTemp >= 50)
                 {
-                    if (CurrentState.Instance.CurrentBoilerWaterTemp >= 50)
-                    {
-                        await CloseBoilerKlepAsync();
-                    }
-                    else
-                    {
-                        await OpenBoilerKlepAsync();
-                    }
+                    await CloseBoilerKlepAsync();
                 }
                 else
                 {
-                    if (CurrentState.Instance.CurrentBoilerWaterTemp >= 50)
-                    {
-                        await CloseBoilerKlepAsync();
-                    }
-                    else
-                    {
-                        await OpenBoilerKlepAsync();
-                    }
+                    await OpenBoilerKlepAsync();
                 }
+            }
 
 
-                ///////////////////////////////////////Airwell Warmte Pomp////////////////////////////////////////////////////////////////////////
-                if (priceLevel == PriceLevel.Expensive || priceLevel == PriceLevel.VeryExpensive)
-                {
-                    if (CurrentState.Instance.CurrentBoilerWaterTemp < 40)
-                    {
-                        await StartAirwellWarmtePompasync();
-                        await SetNormalTempAirwellWarmtePompasync();
-                    }
-                    else
-                    {
-                        //await StopAirwellWarmtePompasync();
-                        await SetLowTempAirwellWarmtePompasync();
-                    }
-                }
-                else if (priceLevel == PriceLevel.Normal)
+            ///////////////////////////////////////Airwell Warmte Pomp////////////////////////////////////////////////////////////////////////
+            if (priceLevel == PriceLevel.Expensive || priceLevel == PriceLevel.VeryExpensive)
+            {
+                if (CurrentState.Instance.CurrentBoilerWaterTemp < 40)
                 {
                     await StartAirwellWarmtePompasync();
                     await SetNormalTempAirwellWarmtePompasync();
                 }
                 else
                 {
-                    await StartAirwellWarmtePompasync();
-                    await SetHighTempAirwellWarmtePompasync();
+                    //await StopAirwellWarmtePompasync();
+                    await SetLowTempAirwellWarmtePompasync();
                 }
-          //  }
+            }
+            else if (priceLevel == PriceLevel.Normal)
+            {
+                await StartAirwellWarmtePompasync();
+                await SetNormalTempAirwellWarmtePompasync();
+            }
+            else
+            {
+                await StartAirwellWarmtePompasync();
+                await SetHighTempAirwellWarmtePompasync();
+            }
+
             ///////////////////////////////////////Zwembad temperature////////////////////////////////////////////////////////////////////////
             if (priceLevel == PriceLevel.Expensive || priceLevel == PriceLevel.VeryExpensive)
             {
@@ -292,14 +291,6 @@ namespace ZwembadControl.Controllers
         {
             CurrentState.Instance.LegionellaBoiler = true;
             relayConnector.CloseRelay(LegionellaBoiler);
-            await OpenBoilerKlepMaxAsync();
-        }
-
-        public async Task StopLegionellasync()
-        {
-            relayConnector.OpenRelay(LegionellaBoiler);
-            await CloseBoilerKlepAsync();
-            CurrentState.Instance.LegionellaBoiler = false;
         }
 
         public async Task OpenBoilerKlepAsync()
@@ -323,25 +314,6 @@ namespace ZwembadControl.Controllers
                 relayConnector.CloseRelay(BoilerKlepDicht);
                 await Task.Delay(10000);// full is 30 seconde
                 relayConnector.OpenRelay(BoilerKlepDicht);
-            }
-        }
-
-        public async Task OpenBoilerKlepMaxAsync()
-        {
-            CurrentState.Instance.BoilerKlepOpen = true;
-            relayConnector.CloseRelay(BoilerKlepOpen);
-            await Task.Delay(32000);
-            relayConnector.OpenRelay(BoilerKlepOpen);
-        }
-
-        public async Task CloseBoilerKlepMaxAsync()
-        {
-            if (CurrentState.Instance.BoilerKlepOpen != false)
-            {
-                relayConnector.CloseRelay(BoilerKlepDicht);
-                await Task.Delay(32000);// full is 30 seconde
-                relayConnector.OpenRelay(BoilerKlepDicht);
-                CurrentState.Instance.BoilerKlepOpen = false;
             }
         }
 

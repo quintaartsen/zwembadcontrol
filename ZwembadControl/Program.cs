@@ -22,6 +22,7 @@ builder.Services.AddSingleton<ZwembadService, ZwembadService>();
 builder.Services.AddSingleton<AirWellConnector, AirWellConnector>();
 builder.Services.AddSingleton<HyconConnector, HyconConnector>();
 builder.Services.AddSingleton<TibberConnector, TibberConnector>();
+builder.Services.AddSingleton<AcquaNetConnector, AcquaNetConnector>();
 builder.Services.AddSingleton<CurrentState, CurrentState>();
 
 //Setup jobs

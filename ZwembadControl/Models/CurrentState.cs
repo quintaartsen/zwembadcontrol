@@ -1,4 +1,4 @@
-﻿using Tibber.Sdk;
+﻿using System.Runtime.Serialization;
 
 namespace ZwembadControl.Models
 {
@@ -18,6 +18,15 @@ namespace ZwembadControl.Models
         public bool BoilerKlepOpen { get; set; }
 
         public DateTime currentDateTime { get; set; }
+
+
+
+        public string Mode { get; set; }
+        public string ZwembadKlepMode { get; set; }
+        public string ZwembadMode { get; set; }
+        public string airwellMode { get; set; }
+        public string klepMode { get; set; }
+        public string boilerMode { get; set; }
     }
 
     public class CurrentState
