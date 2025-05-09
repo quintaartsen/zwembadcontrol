@@ -34,6 +34,7 @@ namespace ZwembadControl.Models
         public string CurrentZwembadWaterChloor { get; set; }
         public string TargetZwembadWaterFlow { get; set; }
         public string CurrentZwembadWaterFlow { get; set; }
+        public bool KlimaatSysteem { get; set; }
     }
 
     public class CurrentState

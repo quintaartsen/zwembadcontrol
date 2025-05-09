@@ -16,6 +16,7 @@ namespace ZwembadControl.Controllers
 
         private readonly FileDatabase<DateModel> database;
 
+        private readonly int KlimaatSysteem = 7;
         private readonly int ZwembadWarmtePomp = 6;
         private readonly int ZwembadKlepOpen = 4;
         private readonly int ZwembadKlepDicht = 5;
@@ -74,6 +75,17 @@ namespace ZwembadControl.Controllers
             CurrentState.Instance.currentDateTime = DateTime.UtcNow;
 
             await ExecuteChangeAsync(priceLevel, airWellData, hyconData);
+
+
+
+            ///////////////////////////////////////Klimaat Systeem////////////////////////////////////////////////////////////////////////
+            if (KlimaatSysteemMoetAan(priceInfo.Today, priceInfo.Current))
+            {
+                await StartKlimaatSysteemasync();
+            } else
+            {
+                await StopKlimaatSysteemasync();
+            }
         }
 
 
@@ -107,9 +119,32 @@ namespace ZwembadControl.Controllers
             return currentPrice.Level;
         }
 
+        private bool KlimaatSysteemMoetAan(ICollection<Price> prices, Price currentPrice)
+        {
+            var startFrame = new TimeOnly(22);
+            var endFrame = new TimeOnly(5);
+            var priceLow = decimal.MaxValue;
+            var time = string.Empty;
+
+            foreach (var price in prices)
+            {
+                var start = DateTime.Parse(price.StartsAt);
+                if(start.Hour >= startFrame.Hour && start.Hour <= endFrame.Hour)
+                {
+                    if(price.Total < priceLow)
+                    {
+                        priceLow = (decimal)price.Total;
+                        time = price.StartsAt;
+                    }
+                }
+            }
+
+            var currentTime = DateTime.Parse(currentPrice.StartsAt);
+            return currentPrice.StartsAt == time || (currentTime.Hour < startFrame.Hour && currentTime.Hour > endFrame.Hour);
+        }
+
         private async Task ExecuteChangeAsync(PriceLevel priceLevel, AirWellData airWellData, HyconData hyconData)
         {
-
             ///////////////////////////////////////Legionella mode////////////////////////////////////////////////////////////////////////
             if (CurrentState.Instance.LegionellaBoiler)
             {
@@ -292,6 +327,18 @@ namespace ZwembadControl.Controllers
         {
             CurrentState.Instance.ZwembadWarmtePomp = false;
             relayConnector.OpenRelay(ZwembadWarmtePomp);
+        }
+
+        public async Task StartKlimaatSysteemasync()
+        {
+            CurrentState.Instance.KlimaatSysteem = true;
+            relayConnector.CloseRelay(KlimaatSysteem);
+        }
+
+        public async Task StopKlimaatSysteemasync()
+        {
+            CurrentState.Instance.KlimaatSysteem = false;
+            relayConnector.OpenRelay(KlimaatSysteem);
         }
 
         public async Task StartLegionellasync()
