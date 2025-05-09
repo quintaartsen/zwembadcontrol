@@ -121,6 +121,8 @@ namespace ZwembadControl.Controllers
 
         private bool KlimaatSysteemMoetAan(ICollection<Price> prices, Price currentPrice)
         {
+            return true;
+             
             var startFrame = new TimeOnly(22);
             var endFrame = new TimeOnly(5);
             var priceLow = decimal.MaxValue;
