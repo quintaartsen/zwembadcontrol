@@ -78,11 +78,12 @@ namespace ZwembadControl.Controllers
 
 
 
-            ///////////////////////////////////////Klimaat Systeem////////////////////////////////////////////////////////////////////////
+            /////////////////////////////////////////Klimaat Systeem////////////////////////////////////////////////////////////////////////
             if (KlimaatSysteemMoetAan(priceInfo.Today, priceInfo.Current))
             {
                 await StartKlimaatSysteemasync();
-            } else
+            }
+            else
             {
                 await StopKlimaatSysteemasync();
             }
@@ -120,18 +121,16 @@ namespace ZwembadControl.Controllers
         }
 
         private bool KlimaatSysteemMoetAan(ICollection<Price> prices, Price currentPrice)
-        {
-            return true;
-             
-            var startFrame = new TimeOnly(22);
-            var endFrame = new TimeOnly(5);
+        {             
+            var startFrame = new TimeOnly(22,0,0);
+            var endFrame = new TimeOnly(5,0,0);
             var priceLow = decimal.MaxValue;
             var time = string.Empty;
 
             foreach (var price in prices)
             {
                 var start = DateTime.Parse(price.StartsAt);
-                if(start.Hour >= startFrame.Hour && start.Hour <= endFrame.Hour)
+                if(start.Hour >= startFrame.Hour || start.Hour <= endFrame.Hour)
                 {
                     if(price.Total < priceLow)
                     {
