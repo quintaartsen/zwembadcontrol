@@ -16,6 +16,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: xx-large;
             background-color: #f0f4f8;
             color: #2d3748;
             padding: 20px;
@@ -257,6 +258,20 @@
                             Uit
                         </button>
                         <button type="submit" name="airwellMode" value="auto" class="px-6 py-3 rounded-xl text-white font-semibold @(Model.airwellMode == "auto" ? "button-enabled" : "button-disabled")">
+                            Automatisch
+                        </button>
+                    </div>
+
+                    <!-- Klimaat Systeem Control -->
+                    <p>Klimaat systeem</p>
+                    <div class="flex-end flex contentEnd space-x-4">
+                        <button type="submit" name="klimaatMode" value="Aan" class="px-6 py-3 rounded-xl text-white font-semibold @(Model.klimaatMode == "Aan" ? "button-enabled" : "button-disabled")">
+                            Aan
+                        </button>
+                        <button type="submit" name="klimaatMode" value="uit" class="px-6 py-3 rounded-xl text-white font-semibold @(Model.klimaatMode == "off" ? "button-enabled" : "button-disabled")">
+                            Uit
+                        </button>
+                        <button type="submit" name="klimaatMode" value="auto" class="px-6 py-3 rounded-xl text-white font-semibold @(Model.klimaatMode == "auto" ? "button-enabled" : "button-disabled")">
                             Automatisch
                         </button>
                     </div>

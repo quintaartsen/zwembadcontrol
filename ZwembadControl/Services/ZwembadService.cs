@@ -1,4 +1,6 @@
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
+using System.IO.Pipelines;
 using Tibber.Sdk;
 using ZwembadControl.Connectors;
 using ZwembadControl.Models;
@@ -74,18 +76,48 @@ namespace ZwembadControl.Controllers
             CurrentState.Instance.CurrentZwembadWaterFlow = hyconData.CurrentFlow;
             CurrentState.Instance.currentDateTime = DateTime.UtcNow;
 
-            await ExecuteChangeAsync(priceLevel, airWellData, hyconData);
+
+
+            await ExecuteChangeAsync(priceInfo.Current.Total ?? default, priceLevel, airWellData, hyconData);
 
 
 
             /////////////////////////////////////////Klimaat Systeem////////////////////////////////////////////////////////////////////////
-            if (KlimaatSysteemMoetAan(priceInfo.Today, priceInfo.Current))
+            if(CurrentState.Instance.klimaatMode == "auto")
             {
-                await StartKlimaatSysteemasync();
+                if (KlimaatSysteemMoetAan(priceInfo.Today, priceInfo.Current))
+                {
+                    await StartKlimaatSysteemasync();
+                }
+                else
+                {
+                    await StopKlimaatSysteemasync();
+                }
             }
-            else
+
+            /////////////////////////////////////////Automatisch Spoelen////////////////////////////////////////////////////////////////////////
+            if (DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
             {
-                await StopKlimaatSysteemasync();
+                var priceLow = decimal.MaxValue;
+                var time = string.Empty;
+
+                for (int i = 0; i < priceInfo.Today.Count - 3; i++) 
+                {
+                    var price = priceInfo.Today.ElementAt(i);
+
+                    var start = DateTime.Parse(price.StartsAt);
+                    var calculatingPrice = price.Total + priceInfo.Today.ElementAt(i+1).Total + priceInfo.Today.ElementAt(i+2).Total;
+                    if (calculatingPrice < priceLow)
+                    {
+                        priceLow = (decimal)calculatingPrice;
+                        time = price.StartsAt;
+                    }
+                }
+
+                if (priceInfo.Current.StartsAt == time)
+                {
+                    await StartLegionellasync();
+                }
             }
         }
 
@@ -144,7 +176,7 @@ namespace ZwembadControl.Controllers
             return currentPrice.StartsAt == time || (currentTime.Hour < startFrame.Hour && currentTime.Hour > endFrame.Hour);
         }
 
-        private async Task ExecuteChangeAsync(PriceLevel priceLevel, AirWellData airWellData, HyconData hyconData)
+        private async Task ExecuteChangeAsync(decimal totalPrice, PriceLevel priceLevel, AirWellData airWellData, HyconData hyconData)
         {
             ///////////////////////////////////////Legionella mode////////////////////////////////////////////////////////////////////////
             if (CurrentState.Instance.LegionellaBoiler)
@@ -159,55 +191,60 @@ namespace ZwembadControl.Controllers
             }
 
             ///////////////////////////////////////Boiler Klep////////////////////////////////////////////////////////////////////////
-            if (priceLevel == PriceLevel.Expensive || priceLevel == PriceLevel.VeryExpensive)
+            if (CurrentState.Instance.boilerMode == "auto")
             {
-                if (CurrentState.Instance.CurrentBoilerWaterTemp >= 50)
+                if (priceLevel == PriceLevel.Expensive || priceLevel == PriceLevel.VeryExpensive)
                 {
-                    await CloseBoilerKlepAsync();
+                    if (CurrentState.Instance.CurrentBoilerWaterTemp >= 50)
+                    {
+                        await CloseBoilerKlepAsync();
+                    }
+                    else
+                    {
+                        await OpenBoilerKlepAsync();
+                    }
                 }
                 else
                 {
-                    await OpenBoilerKlepAsync();
-                }
-            }
-            else
-            {
-                if (CurrentState.Instance.CurrentBoilerWaterTemp >= 50)
-                {
-                    await CloseBoilerKlepAsync();
-                }
-                else
-                {
-                    await OpenBoilerKlepAsync();
+                    if (CurrentState.Instance.CurrentBoilerWaterTemp >= 50)
+                    {
+                        await CloseBoilerKlepAsync();
+                    }
+                    else
+                    {
+                        await OpenBoilerKlepAsync();
+                    }
                 }
             }
 
 
             ///////////////////////////////////////Airwell Warmte Pomp////////////////////////////////////////////////////////////////////////
-            if (priceLevel == PriceLevel.Expensive || priceLevel == PriceLevel.VeryExpensive)
+            if (CurrentState.Instance.airwellMode == "auto")
             {
-                if (CurrentState.Instance.CurrentBoilerWaterTemp < 40)
+                if (priceLevel == PriceLevel.Expensive || priceLevel == PriceLevel.VeryExpensive)
+                {
+                    if (CurrentState.Instance.CurrentBoilerWaterTemp < 40)
+                    {
+                        await StartAirwellWarmtePompasync();
+                        await SetNormalTempAirwellWarmtePompasync();
+                    }
+                    else
+                    {
+                        //await StopAirwellWarmtePompasync();
+                        await SetLowTempAirwellWarmtePompasync();
+                    }
+                }
+                else if (priceLevel == PriceLevel.Normal)
                 {
                     await StartAirwellWarmtePompasync();
                     await SetNormalTempAirwellWarmtePompasync();
                 }
                 else
                 {
-                    //await StopAirwellWarmtePompasync();
-                    await SetLowTempAirwellWarmtePompasync();
+                    await StartAirwellWarmtePompasync();
+                    await SetHighTempAirwellWarmtePompasync();
                 }
             }
-            else if (priceLevel == PriceLevel.Normal)
-            {
-                await StartAirwellWarmtePompasync();
-                await SetNormalTempAirwellWarmtePompasync();
-            }
-            else
-            {
-                await StartAirwellWarmtePompasync();
-                await SetHighTempAirwellWarmtePompasync();
-            }
-
             ///////////////////////////////////////Zwembad temperature////////////////////////////////////////////////////////////////////////
             if (priceLevel == PriceLevel.Expensive || priceLevel == PriceLevel.VeryExpensive)
             {
@@ -245,7 +282,8 @@ namespace ZwembadControl.Controllers
             }
             else
             {
-                if (hyconData.CurrentTempature < (hyconData.TargetTempature + BufferRangeZwembad))
+                var additionalBuffer = totalPrice <= 0 ? 1 : 0;
+                if (hyconData.CurrentTempature < (hyconData.TargetTempature + BufferRangeZwembad + additionalBuffer))
                 {
                     await StartZwembadWarmtePompasync();
                     await OpenZwembadKlepAsync();

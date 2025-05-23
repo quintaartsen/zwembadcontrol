@@ -19,6 +19,8 @@
         [BindProperty]
         public string airwellMode { get; set; }
         [BindProperty]
+        public string klimaatMode { get; set; }
+        [BindProperty]
         public string boilerMode { get; set; }
 
 
@@ -146,6 +148,23 @@
                 }
             }
 
+            if (klimaatMode != CurrentState.Instance.klimaatMode && klimaatMode != null)
+            {
+                CurrentState.Instance.klimaatMode = klimaatMode;
+
+                switch (klimaatMode)
+                {
+                    case "open":
+                        await _service.StartKlimaatSysteemasync();
+                        break;
+                    case "close":
+                        await _service.StopKlimaatSysteemasync();
+                        break;
+                    case "auto":
+                        break;
+                }
+            }
+
             UpdateDataModel();
         }
 
@@ -175,6 +194,7 @@
             ZwembadKlepMode = CurrentState.Instance.ZwembadKlepMode;
             ZwembadMode = CurrentState.Instance.ZwembadMode;
             airwellMode = CurrentState.Instance.airwellMode;
+            klimaatMode = CurrentState.Instance.klimaatMode;
             boilerMode = CurrentState.Instance.boilerMode;
 
         }
