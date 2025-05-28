@@ -153,7 +153,7 @@ namespace ZwembadControl.Controllers
         }
 
         private bool KlimaatSysteemMoetAan(ICollection<Price> prices, Price currentPrice)
-        {             
+        {
             var startFrame = new TimeOnly(22,0,0);
             var endFrame = new TimeOnly(5,0,0);
             var priceLow = decimal.MaxValue;
@@ -170,6 +170,16 @@ namespace ZwembadControl.Controllers
                         time = price.StartsAt;
                     }
                 }
+            }
+
+            if (DateTime.Now.DayOfWeek == DayOfWeek.Saturday)
+            {
+                startFrame = new TimeOnly(14, 0, 0);
+            }
+
+            if (DateTime.Now.DayOfWeek == DayOfWeek.Sunday)
+            {
+                startFrame = new TimeOnly(6, 0, 0);
             }
 
             var currentTime = DateTime.Parse(currentPrice.StartsAt);
