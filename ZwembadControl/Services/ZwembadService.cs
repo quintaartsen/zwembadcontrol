@@ -19,6 +19,7 @@ namespace ZwembadControl.Controllers
         private readonly FileDatabase<DateModel> database;
 
         private readonly int KlimaatSysteem = 7;
+        private readonly int PompZwembadWarmtePomp = 8;
         private readonly int ZwembadWarmtePomp = 6;
         private readonly int ZwembadKlepOpen = 4;
         private readonly int ZwembadKlepDicht = 5;
@@ -360,7 +361,7 @@ namespace ZwembadControl.Controllers
             var value = 55;
             if (CurrentState.Instance.TargetBoilerWaterTemp != value || CurrentState.Instance.TargetBufferWaterTemp != value)
             {
-                await airWellConnector.SetBoilerTemp(value);
+                await airWellConnector.SetBoilerTemp(50);
                 await airWellConnector.SetWaterTemp(value);
             }
         }
@@ -369,6 +370,7 @@ namespace ZwembadControl.Controllers
         public async Task StartZwembadWarmtePompasync()
         {
             CurrentState.Instance.ZwembadWarmtePomp = true;
+            relayConnector.CloseRelay(PompZwembadWarmtePomp);
             relayConnector.CloseRelay(ZwembadWarmtePomp);
         }
 
@@ -376,6 +378,7 @@ namespace ZwembadControl.Controllers
         {
             CurrentState.Instance.ZwembadWarmtePomp = false;
             relayConnector.OpenRelay(ZwembadWarmtePomp);
+            relayConnector.OpenRelay(PompZwembadWarmtePomp);
         }
 
         public async Task StartKlimaatSysteemasync()
