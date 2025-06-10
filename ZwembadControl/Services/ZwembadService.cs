@@ -52,7 +52,7 @@ namespace ZwembadControl.Controllers
 
         public List<DateModel> GetStateHistory()
         {
-            return database.GetAll();
+            return database.GetAll().Where(t => t.currentDateTime.Month == DateTime.Now.Month && t.currentDateTime.Year == DateTime.Now.Year).ToList();
         }
 
         public async Task GetDataAsync()
