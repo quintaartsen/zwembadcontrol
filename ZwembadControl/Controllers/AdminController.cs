@@ -88,5 +88,19 @@ namespace ZwembadControl.Controllers
         {
             await acquaNetConnector.StartSpoelenAsync();
         }
+
+        [HttpGet]
+        [Route("StartLegionella")]
+        public async Task StartLegionellaAsync()
+        {
+            await _service.StartLegionellasync();
+        }
+
+        [HttpGet]
+        [Route("StopLegionella")]
+        public async Task StopLegionellaAsync()
+        {
+            await _service.StopLegionellasync();
+        }
     }
 }
