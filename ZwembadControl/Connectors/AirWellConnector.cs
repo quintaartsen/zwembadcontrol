@@ -82,8 +82,15 @@ namespace ZwembadControl.Connectors
             }
             };
 
-            var response = await Request(url, requestData);
-            return JsonConvert.DeserializeObject<List<AirWellData>>(response)[0];
+            try
+            {
+                var response = await Request(url, requestData);
+                return JsonConvert.DeserializeObject<List<AirWellData>>(response)[0];
+            }
+            catch(Exception e)
+            {
+                return new AirWellData() { };
+            }
         }
 
 
