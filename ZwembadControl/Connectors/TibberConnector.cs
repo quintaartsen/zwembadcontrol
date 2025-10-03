@@ -2,7 +2,7 @@
 
 namespace ZwembadControl.Connectors
 {
-    public class TibberConnector
+    public class TibberConnector : ITibberConnector
     {
 
         public async Task<PriceInfo> GetPriceLevel()

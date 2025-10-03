@@ -2,7 +2,7 @@
 
 namespace ZwembadControl.Connectors
 {
-    public class AcquaNetConnector
+    public class AcquaNetConnector : IAcquaNetConnector
     {
         private readonly string baseUrl = "http://192.168.172.102";
 

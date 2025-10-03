@@ -8,7 +8,7 @@ using Newtonsoft.Json.Linq;
 
 namespace ZwembadControl.Connectors
 {
-    public class AirWellConnector
+    public class AirWellConnector : IAirWellConnector
     {
         private static readonly HttpClient client = new HttpClient();
         private readonly string baseUrl = "https://api-airhome.airwell.fr";
@@ -170,7 +170,7 @@ namespace ZwembadControl.Connectors
             return default;
         }
 
-        internal async Task SetBoilerTemp(int value)
+        public async Task SetBoilerTemp(int value)
         {
             var requestData = new
             {
@@ -193,7 +193,7 @@ namespace ZwembadControl.Connectors
             await ActionRequest(requestData);
         }
 
-        internal async Task SetWaterTemp(int value)
+        public async Task SetWaterTemp(int value)
         {
             var requestData = new
             {

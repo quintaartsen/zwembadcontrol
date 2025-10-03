@@ -2,7 +2,7 @@
 
 namespace ZwembadControl.Connectors
 {
-    public class RelayConnector
+    public class RelayConnector : IRelayConnector
     {
 
         private readonly int[] pins = { 5, 6, 13, 16, 19, 20, 21, 26 };

@@ -11,8 +11,8 @@ namespace ZwembadControl.Connectors
 {
     public class HyconData
     {
-        public double TargetTempature { get; set; }
-        public double CurrentTempature { get; set; }
+        public double TargetTemperature { get; set; }
+        public double CurrentTemperature { get; set; }
         public string TargetPh { get; set; }
         public string CurrentPh { get; set; }
         public string TargetChloor { get; set; }
@@ -21,7 +21,7 @@ namespace ZwembadControl.Connectors
         public string CurrentFlow { get; set; }
     }
 
-    public class HyconConnector
+    public class HyconConnector : IHyconConnector
     {
         private static readonly HttpClient client = new HttpClient();
         private readonly string baseUrl = "http://192.168.10.241:8080";
@@ -101,8 +101,8 @@ namespace ZwembadControl.Connectors
 
                 var hyconData = new HyconData
                 {
-                    TargetTempature = targetTemp,
-                    CurrentTempature = currentTemp,
+                    TargetTemperature = targetTemp,
+                    CurrentTemperature = currentTemp,
                     TargetPh = setpointValuePH,
                     CurrentPh = currentValuePH,
                     TargetChloor = setpointValueChloor,
@@ -123,8 +123,8 @@ namespace ZwembadControl.Connectors
             }
             return new HyconData
             {
-                TargetTempature = default,
-                CurrentTempature = default
+                TargetTemperature = default,
+                CurrentTemperature = default
             };
         }
     }

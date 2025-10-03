@@ -22,7 +22,7 @@ namespace ZwembadControl.Jobs
             isRunning = true;
             try
             {
-                await _zwembadService.GetDataAsync();
+                await _zwembadService.RunJob();
             }
             catch (Exception)
             {

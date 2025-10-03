@@ -46,9 +46,9 @@
         public string CurrentPriceLevel { get; set; }
 
 
-        private readonly ZwembadService _service;
+        private readonly ZwembadServiceActies _service;
 
-        public IndexModel(ZwembadService zwembadservice)
+        public IndexModel(ZwembadServiceActies zwembadservice)
         {
             _service = zwembadservice;
         }
@@ -121,10 +121,10 @@
                 switch (ZwembadMode)
                 {
                     case "open":
-                        await _service.StartZwembadWarmtePompasync();
+                        await _service.StartZwembadWarmtePompAsync();
                         break;
                     case "close":
-                        await _service.StopZwembadWarmtePompasync();
+                        await _service.StopZwembadWarmtePompAsync();
                         break;
                     case "auto":
                         break;

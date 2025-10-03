@@ -1,106 +1,94 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Text;
 using ZwembadControl.Connectors;
 using ZwembadControl.Models;
 
-namespace ZwembadControl.Controllers
+namespace ZwembadControl.Controllers;
+
+[Produces("application/json")]
+[Route("api/v1/[controller]")]
+[ApiController]
+public class AdminController(ZwembadService service, ZwembadServiceActies _service, AcquaNetConnector acquaNetConnector) : Controller
 {
-    [Produces("application/json")]
-    [Route("api/v1/[controller]")]
-    [ApiController]
-    public class AdminController : Controller
+
+    [HttpGet]
+    [Route("GetCurrentStatus")]
+    public async Task<DateModel> GetCurrentStatusAsync()
     {
-        private readonly ZwembadService _service;
-        private readonly AcquaNetConnector acquaNetConnector;
+        await service.RunJob();
+        return CurrentState.Instance;
+    }
 
+    [HttpGet]
+    [Route("OpenZwembadKlep")]
+    public async void OpenZwembadKlep()
+    {
+        await _service.OpenZwembadKlepAsync();
+    }
 
-        public AdminController(ZwembadService zwembadService, AcquaNetConnector acquaNetConnector)
-        {
-            _service = zwembadService;
-            this.acquaNetConnector = acquaNetConnector;
-        }
+    [HttpGet]
+    [Route("CloseZwembadKlep")]
+    public async void CloseZwembadKlep()
+    {
+        await _service.CloseZwembadKlepAsync();
+    }
 
-        [HttpGet]
-        [Route("GetCurrentStatus")]
-        public async Task<DateModel> GetCurrentStatusAsync()
-        {
-            await _service.GetDataAsync();
-            return CurrentState.Instance;
-        }
+    [HttpGet]
+    [Route("OpenBoilerKlep")]
+    public async void OpenBoilerKlep()
+    {
+        await _service.OpenBoilerKlepAsync();
+    }
 
-        [HttpGet]
-        [Route("OpenZwembadKlep")]
-        public async void OpenZwembadKlep()
-        {
-            await _service.OpenZwembadKlepAsync();
-        }
+    [HttpGet]
+    [Route("CloseBoilerKlep")]
+    public async void CloseBoilerKlep()
+    {
+        await _service.CloseBoilerKlepAsync();
+    }
 
-        [HttpGet]
-        [Route("CloseZwembadKlep")]
-        public async void CloseZwembadKlep()
-        {
-            await _service.CloseZwembadKlepAsync();
-        }
+    [HttpGet]
+    [Route("StartZwembadWarmtePompasync")]
+    public async void StartZwembadWarmtePompasync()
+    {
+        await _service.StartZwembadWarmtePompAsync();
+    }
 
-        [HttpGet]
-        [Route("OpenBoilerKlep")]
-        public async void OpenBoilerKlep()
-        {
-            await _service.OpenBoilerKlepAsync();
-        }
+    [HttpGet]
+    [Route("StopZwembadWarmtePompasync")]
+    public async void StopZwembadWarmtePompasync()
+    {
+        await _service.StopZwembadWarmtePompAsync();
+    }
 
-        [HttpGet]
-        [Route("CloseBoilerKlep")]
-        public async void CloseBoilerKlep()
-        {
-            await _service.CloseBoilerKlepAsync();
-        }
+    [HttpGet]
+    [Route("GetStateHistory")]
+    public List<DateModel> GetStateHistory() => service.GetStateHistory();
 
-        [HttpGet]
-        [Route("StartZwembadWarmtePompasync")]
-        public async void StartZwembadWarmtePompasync()
-        {
-            await _service.StartZwembadWarmtePompasync();
-        }
+    [HttpGet]
+    [Route("GetDouchData")]
+    public async Task<string> GetDouchData()
+    {
+        return await acquaNetConnector.GetDataAsync();
+    }
 
-        [HttpGet]
-        [Route("StopZwembadWarmtePompasync")]
-        public async void StopZwembadWarmtePompasync()
-        {
-            await _service.StopZwembadWarmtePompasync();
-        }
+    [HttpGet]
+    [Route("StartSpoelen")]
+    public async Task StartSpoelenAsync()
+    {
+        await acquaNetConnector.StartSpoelenAsync();
+    }
 
-        [HttpGet]
-        [Route("GetStateHistory")]
-        public List<DateModel> GetStateHistory() => _service.GetStateHistory();
+    [HttpGet]
+    [Route("StartLegionella")]
+    public async Task StartLegionellaAsync()
+    {
+        await _service.StartLegionellasync();
+    }
 
-        [HttpGet]
-        [Route("GetDouchData")]
-        public async Task<string> GetDouchData()
-        {
-            return await acquaNetConnector.GetDataAsync();
-        }
-
-        [HttpGet]
-        [Route("StartSpoelen")]
-        public async Task StartSpoelenAsync()
-        {
-            await acquaNetConnector.StartSpoelenAsync();
-        }
-
-        [HttpGet]
-        [Route("StartLegionella")]
-        public async Task StartLegionellaAsync()
-        {
-            await _service.StartLegionellasync();
-        }
-
-        [HttpGet]
-        [Route("StopLegionella")]
-        public async Task StopLegionellaAsync()
-        {
-            await _service.StopLegionellasync();
-        }
+    [HttpGet]
+    [Route("StopLegionella")]
+    public async Task StopLegionellaAsync()
+    {
+        await _service.StopLegionellasync();
     }
 }
