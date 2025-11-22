@@ -19,6 +19,7 @@ builder.Services.AddSwaggerGen();
 
 //Set Injection mapping
 builder.Services.AddSingleton<IRelayConnector, RelayConnector>();
+builder.Services.AddSingleton<RelayConnector, RelayConnector>();
 builder.Services.AddSingleton<RelayController, RelayController>();
 builder.Services.AddSingleton<ZwembadService, ZwembadService>();
 builder.Services.AddSingleton<ZwembadServiceActies, ZwembadServiceActies>();
@@ -26,13 +27,23 @@ builder.Services.AddSingleton<IAirWellConnector, AirWellConnector>();
 builder.Services.AddSingleton<IHyconConnector, HyconConnector>();
 builder.Services.AddSingleton<ITibberConnector, TibberConnector>();
 builder.Services.AddSingleton<IAcquaNetConnector, AcquaNetConnector>();
+builder.Services.AddSingleton<AcquaNetConnector, AcquaNetConnector>();
 builder.Services.AddSingleton<CurrentState, CurrentState>();
 
-builder.Services.AddSingleton<Flow, AirwellFlow>();
-builder.Services.AddSingleton<Flow, BoilerFlow>();
-builder.Services.AddSingleton<Flow, KlimaatFlow>();
-builder.Services.AddSingleton<Flow, LegionellaFlow>();
-builder.Services.AddSingleton<Flow, ZwembadFlow>();
+builder.Services.AddSingleton<AirwellFlow>();
+builder.Services.AddSingleton<BoilerFlow>();
+builder.Services.AddSingleton<KlimaatFlow>();
+builder.Services.AddSingleton<LegionellaFlow>();
+builder.Services.AddSingleton<ZwembadFlow>();
+
+builder.Services.AddSingleton<IList<Flow>>(sp => new List<Flow>
+{
+    sp.GetRequiredService<AirwellFlow>(),
+    sp.GetRequiredService<BoilerFlow>(),
+    sp.GetRequiredService<KlimaatFlow>(),
+    sp.GetRequiredService<LegionellaFlow>(),
+    sp.GetRequiredService<ZwembadFlow>()
+});
 
 //Setup jobs
 

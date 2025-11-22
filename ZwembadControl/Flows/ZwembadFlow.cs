@@ -49,7 +49,7 @@ public class ZwembadFlow(ZwembadServiceActies zwembadServiceActies) : Flow(zwemb
 
     private async Task StartHeatingAsync(bool openKlep)
     {
-        if (openKlep)
+        if (openKlep && CurrentState.Instance.ZwembadMode == "auto")
         {
             await zwembadServiceActies.OpenZwembadKlepAsync();
         }
@@ -58,7 +58,10 @@ public class ZwembadFlow(ZwembadServiceActies zwembadServiceActies) : Flow(zwemb
 
     private async Task StopHeatingAsync()
     {
-        await zwembadServiceActies.CloseZwembadKlepAsync();
+        if (CurrentState.Instance.ZwembadMode == "auto")
+        {
+            await zwembadServiceActies.CloseZwembadKlepAsync();
+        }
         await zwembadServiceActies.StopZwembadWarmtePompAsync();
     }
 }
