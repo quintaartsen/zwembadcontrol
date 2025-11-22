@@ -242,10 +242,10 @@
                     <!-- Zwembad Warmtepomp Control -->
                     <p>ZwembadWarmtePomp</p>
                     <div class="flex-end flex contentEnd  space-x-4">
-                        <button type="submit" name="zwembadMode" value="Aan" class="px-6 py-3 rounded-xl text-white font-semibold @(Model.ZwembadMode == "Aan" ? "button-enabled" : "button-disabled")">
+                        <button type="submit" name="zwembadMode" value="open" class="px-6 py-3 rounded-xl text-white font-semibold @(Model.ZwembadMode == "open" ? "button-enabled" : "button-disabled")">
                             Aan
                         </button>
-                        <button type="submit" name="zwembadMode" value="uit" class="px-6 py-3 rounded-xl text-white font-semibold @(Model.ZwembadMode == "off" ? "button-enabled" : "button-disabled")">
+                        <button type="submit" name="zwembadMode" value="close" class="px-6 py-3 rounded-xl text-white font-semibold @(Model.ZwembadMode == "close" ? "button-enabled" : "button-disabled")">
                             Uit
                         </button>
                         <button type="submit" name="zwembadMode" value="auto" class="px-6 py-3 rounded-xl text-white font-semibold @(Model.ZwembadMode == "auto" ? "button-enabled" : "button-disabled")">
@@ -256,10 +256,10 @@
                     <!-- Airwell Warmtepomp Control -->
                     <p>AirwellWarmtePomp</p>
                     <div class="flex-end flex contentEnd space-x-4">
-                        <button type="submit" name="airwellMode" value="Aan" class="px-6 py-3 rounded-xl text-white font-semibold @(Model.airwellMode == "Aan" ? "button-enabled" : "button-disabled")">
+                        <button type="submit" name="airwellMode" value="open" class="px-6 py-3 rounded-xl text-white font-semibold @(Model.airwellMode == "open" ? "button-enabled" : "button-disabled")">
                             Aan
                         </button>
-                        <button type="submit" name="airwellMode" value="uit" class="px-6 py-3 rounded-xl text-white font-semibold @(Model.airwellMode == "off" ? "button-enabled" : "button-disabled")">
+                        <button type="submit" name="airwellMode" value="close" class="px-6 py-3 rounded-xl text-white font-semibold @(Model.airwellMode == "close" ? "button-enabled" : "button-disabled")">
                             Uit
                         </button>
                         <button type="submit" name="airwellMode" value="auto" class="px-6 py-3 rounded-xl text-white font-semibold @(Model.airwellMode == "auto" ? "button-enabled" : "button-disabled")">
@@ -270,10 +270,10 @@
                     <!-- Klimaat Systeem Control -->
                     <p>Klimaat systeem</p>
                     <div class="flex-end flex contentEnd space-x-4">
-                        <button type="submit" name="klimaatMode" value="Aan" class="px-6 py-3 rounded-xl text-white font-semibold @(Model.klimaatMode == "Aan" ? "button-enabled" : "button-disabled")">
+                        <button type="submit" name="klimaatMode" value="open" class="px-6 py-3 rounded-xl text-white font-semibold @(Model.klimaatMode == "open" ? "button-enabled" : "button-disabled")">
                             Aan
                         </button>
-                        <button type="submit" name="klimaatMode" value="off" class="px-6 py-3 rounded-xl text-white font-semibold @(Model.klimaatMode == "off" ? "button-enabled" : "button-disabled")">
+                        <button type="submit" name="klimaatMode" value="close" class="px-6 py-3 rounded-xl text-white font-semibold @(Model.klimaatMode == "close" ? "button-enabled" : "button-disabled")">
                             Uit
                         </button>
                         <button type="submit" name="klimaatMode" value="auto" class="px-6 py-3 rounded-xl text-white font-semibold @(Model.klimaatMode == "auto" ? "button-enabled" : "button-disabled")">
