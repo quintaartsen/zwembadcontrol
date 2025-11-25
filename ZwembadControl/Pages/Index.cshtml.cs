@@ -213,6 +213,7 @@
             Spoelen = CurrentState.Instance.Spoelen;
             ZwembadKlepMode = CurrentState.Instance.ZwembadKlepMode;
             ZwembadMode = CurrentState.Instance.ZwembadMode;
+            ZwembadPompMode = CurrentState.Instance.ZwembadPompMode;
             airwellMode = CurrentState.Instance.airwellMode;
             klimaatMode = CurrentState.Instance.klimaatMode;
             boilerMode = CurrentState.Instance.boilerMode;
