@@ -55,11 +55,24 @@ public class ZwembadServiceActies(IRelayConnector relayConnector, IAirWellConnec
         }
     }
 
+    public async Task StartZwembadPompAsync()
+    {
+        relayConnector.CloseRelay(RelayConfig.PompZwembadWarmtePomp);
+    }
+
+    public async Task StopZwembadPompAsync()
+    {
+        relayConnector.OpenRelay(RelayConfig.PompZwembadWarmtePomp);
+    }
+
 
     public async Task StartZwembadWarmtePompAsync()
     {
         CurrentState.Instance.ZwembadWarmtePomp = true;
-        relayConnector.CloseRelay(RelayConfig.PompZwembadWarmtePomp);
+        if(CurrentState.Instance.ZwembadPompMode == "auto")
+        {
+            relayConnector.CloseRelay(RelayConfig.PompZwembadWarmtePomp);
+        }
         relayConnector.CloseRelay(RelayConfig.ZwembadWarmtePomp);
     }
 
@@ -67,7 +80,11 @@ public class ZwembadServiceActies(IRelayConnector relayConnector, IAirWellConnec
     {
         CurrentState.Instance.ZwembadWarmtePomp = false;
         relayConnector.OpenRelay(RelayConfig.ZwembadWarmtePomp);
-        relayConnector.OpenRelay(RelayConfig.PompZwembadWarmtePomp);
+
+        if (CurrentState.Instance.ZwembadPompMode == "auto")
+        {
+            relayConnector.OpenRelay(RelayConfig.PompZwembadWarmtePomp);
+        }
     }
 
     public async Task StartKlimaatSysteemasync()

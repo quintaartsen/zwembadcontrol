@@ -17,6 +17,8 @@
         [BindProperty]
         public string ZwembadMode { get; set; }
         [BindProperty]
+        public string ZwembadPompMode { get; set; }
+        [BindProperty]
         public string airwellMode { get; set; }
         [BindProperty]
         public string klimaatMode { get; set; }
@@ -130,6 +132,24 @@
                         break;
                 }
             }
+
+            if (ZwembadPompMode != CurrentState.Instance.ZwembadPompMode && ZwembadPompMode != null)
+            {
+                CurrentState.Instance.ZwembadPompMode = ZwembadPompMode;
+
+                switch (ZwembadPompMode)
+                {
+                    case "open":
+                        await _service.StartZwembadPompAsync();
+                        break;
+                    case "close":
+                        await _service.StopZwembadPompAsync();
+                        break;
+                    case "auto":
+                        break;
+                }
+            }
+
 
             if (airwellMode != CurrentState.Instance.airwellMode && airwellMode != null)
             {

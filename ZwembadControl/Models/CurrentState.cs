@@ -24,6 +24,7 @@ namespace ZwembadControl.Models
         public string Mode { get; set; }
         public string ZwembadKlepMode { get; set; }
         public string ZwembadMode { get; set; }
+        public string ZwembadPompMode { get; set; }
         public string airwellMode { get; set; }
         public string klimaatMode { get; set; }
         public string klepMode { get; set; }
